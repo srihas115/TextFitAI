@@ -8,6 +8,18 @@
   </head>
   <body>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <div id="welcomeOverlay" class="welcome-overlay" role="presentation" hidden>
+      <section class="welcome-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeDescription">
+        <p class="eyebrow">First things first</p>
+        <h2 id="welcomeTitle">Welcome 👋</h2>
+        <p id="welcomeDescription">
+          TextFitAI helps trim or expand your writing until it fits an exact word-count or character-count target.
+          Paste your text, set any optional minimum or maximum limits, and the app will revise it while checking the
+          final counts locally. It does not store documents, users, sessions, or history.
+        </p>
+        <button id="welcomeDismissButton" class="welcome-dismiss-button" type="button">Okay, lets go!</button>
+      </section>
+    </div>
 
     <main class="app-shell">
       <header class="app-header">
