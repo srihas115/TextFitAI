@@ -65,6 +65,65 @@ body {
   transform: translateY(0);
 }
 
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: rgba(55, 53, 47, 0.58);
+  backdrop-filter: blur(2px);
+}
+
+.welcome-overlay[hidden] {
+  display: none;
+}
+
+.welcome-dialog {
+  width: min(520px, 100%);
+  padding: 24px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 8px;
+  background: var(--canvas);
+  box-shadow: rgba(15, 15, 15, 0.24) 0 28px 72px -24px;
+}
+
+.welcome-dialog h2 {
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.welcome-dialog p:not(.eyebrow) {
+  margin: 14px 0 22px;
+  color: var(--charcoal);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.welcome-dismiss-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--purple);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.welcome-dismiss-button:hover {
+  background: var(--purple-pressed);
+}
+
+.welcome-dismiss-button:focus-visible {
+  outline: 3px solid rgba(86, 69, 212, 0.22);
+  outline-offset: 3px;
+}
+
 button,
 input,
 textarea {

@@ -14,6 +14,8 @@ const revisionCounter = document.querySelector("#revisionCounter");
 const activityStream = document.querySelector("#activityStream");
 const revisionSummaryList = document.querySelector("#revisionSummaryList");
 const toast = document.querySelector("#toast");
+const welcomeOverlay = document.querySelector("#welcomeOverlay");
+const welcomeDismissButton = document.querySelector("#welcomeDismissButton");
 
 const fields = {
   min_words: document.querySelector("#minWords"),
@@ -39,10 +41,42 @@ let toastTimer = null;
 let manualDirection = "shorten";
 let activeActivityMessages = activityMessages;
 const visibilityTimers = new WeakMap();
+const welcomeStorageKey = "textfitai-welcome-seen";
 
 function countWords(text) {
   const trimmed = text.trim();
   return trimmed === "" ? 0 : trimmed.split(/\s+/).length;
+}
+
+function hasSeenWelcome() {
+  try {
+    return window.localStorage.getItem(welcomeStorageKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markWelcomeSeen() {
+  try {
+    window.localStorage.setItem(welcomeStorageKey, "true");
+  } catch {
+    // The popup can still be dismissed if localStorage is unavailable.
+  }
+}
+
+function showWelcomeIfNeeded() {
+  if (hasSeenWelcome()) {
+    return;
+  }
+
+  welcomeOverlay.hidden = false;
+  welcomeDismissButton.focus();
+}
+
+function dismissWelcome() {
+  markWelcomeSeen();
+  welcomeOverlay.hidden = true;
+  textInput.focus();
 }
 
 function countChars(text) {
@@ -265,6 +299,7 @@ directionOptions.forEach((button) => {
     updateCounts();
   });
 });
+welcomeDismissButton.addEventListener("click", dismissWelcome);
 
 fitButton.addEventListener("click", async () => {
   const text = textInput.value;
@@ -335,3 +370,4 @@ function parseExpansionNotes() {
 
 updateManualDirectionButtons();
 updateCounts();
+showWelcomeIfNeeded();
