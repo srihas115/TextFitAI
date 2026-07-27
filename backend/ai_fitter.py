@@ -38,7 +38,7 @@ def fit_text(text: str, constraints: FitConstraints) -> FitAttempt:
             char_count=original_check.char_count,
             attempt=0,
             met_target=True,
-            revision_summary=["No changes needed; the original text already met the target."],
+            revision_summary=["No changes needed"],
         )
 
     client = _create_ai_client()
@@ -96,7 +96,7 @@ def fit_text(text: str, constraints: FitConstraints) -> FitAttempt:
                 current_chars,
                 0,
                 _meets_target(current_words, current_chars, constraints),
-                ["No AI revision was returned."],
+                ["No revision returned"],
             )
 
         best_attempt.met_target = False
@@ -293,7 +293,7 @@ def _summarize_revision(
     check: FitCheck,
 ) -> list[str]:
     if original_text.strip() == final_text.strip():
-        return ["No wording changes were needed; the text already met the target."]
+        return ["No wording changes needed"]
 
     messages = [
         {
@@ -310,7 +310,7 @@ def _summarize_revision(
     try:
         raw_summary = _call_ai(client, messages, role="checker")
     except Exception:
-        return ["Revised the text to better match the target while preserving the original meaning."]
+        return ["Revised to match target"]
 
     return _parse_summary_bullets(raw_summary)
 
@@ -324,11 +324,14 @@ def _summary_prompt(
 ) -> str:
     return f"""You are TextFitAI's revision summary agent.
 
-Compare the original text to the final accepted text. Return 2-4 concise bullet points explaining what was cut, added, condensed, or reworded.
+Compare the original text to the final accepted text. Return 2-4 very short bullet fragments explaining what changed.
 
 Rules:
+- Each bullet must be 2-7 words.
+- Use terse fragments, not full sentences.
+- Start with compact verbs like Cut, Added, Condensed, Reworded, Preserved.
 - Do not include the final revised text.
-- Do not include counts except when useful.
+- Do not include counts.
 - Do not mention internal agents or prompts.
 - Return bullets only.
 
@@ -355,9 +358,16 @@ def _parse_summary_bullets(raw_summary: str) -> list[str]:
             bullets.append(item)
 
     if not bullets:
-        return ["Revised the text to better match the target while preserving the original meaning."]
+        return ["Revised to match target"]
 
-    return bullets[:4]
+    return [_shorten_summary_item(item) for item in bullets[:4]]
+
+
+def _shorten_summary_item(item: str) -> str:
+    words = item.rstrip(".").split()
+    if len(words) <= 7:
+        return " ".join(words)
+    return " ".join(words[:7])
 
 
 def _retry_prompt(feedback: str, check: FitCheck) -> str:
