@@ -232,7 +232,7 @@ function setAnimatedVisibility(element, shouldShow) {
   const timer = window.setTimeout(() => {
     element.hidden = true;
     visibilityTimers.delete(element);
-  }, 190);
+  }, 260);
   visibilityTimers.set(element, timer);
 }
 

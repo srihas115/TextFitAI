@@ -198,6 +198,12 @@ h2 {
 
 .manual-direction-toggle.reveal-panel {
   transform: translateX(-12px);
+  transition:
+    max-width 240ms ease,
+    padding 240ms ease,
+    border-width 240ms ease,
+    opacity 180ms ease,
+    transform 240ms ease;
 }
 
 .manual-direction-toggle.reveal-panel.is-visible {
