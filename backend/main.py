@@ -26,9 +26,9 @@ app.add_middleware(
 
 class FitRequest(BaseModel):
     text: str = Field(..., min_length=1)
-    min_words: Optional[int] = Field(default=None, ge=0)
+    min_words: Optional[int] = Field(default=0, ge=0)
     max_words: Optional[int] = Field(default=None, ge=0)
-    min_chars: Optional[int] = Field(default=None, ge=0)
+    min_chars: Optional[int] = Field(default=1, ge=0)
     max_chars: Optional[int] = Field(default=None, ge=0)
 
     @model_validator(mode="after")
@@ -46,6 +46,7 @@ class FitResponse(BaseModel):
     char_count: int
     attempts: int
     met_target: bool
+    revision_summary: list[str]
 
 
 @app.get("/health")
@@ -75,6 +76,7 @@ def fit(payload: FitRequest) -> FitResponse:
         char_count=fitted.char_count,
         attempts=fitted.attempt,
         met_target=fitted.met_target,
+        revision_summary=fitted.revision_summary,
     )
 
 
