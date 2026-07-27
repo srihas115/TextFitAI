@@ -109,7 +109,7 @@ fitButton.addEventListener("click", async () => {
   fitButton.disabled = true;
   fitButton.textContent = "Fitting...";
   statusLine.className = "status";
-  statusLine.textContent = "Fitto is revising against your exact target.";
+  statusLine.textContent = "TextFitAI is revising against your exact target.";
 
   try {
     const response = await fetch("/fit", {

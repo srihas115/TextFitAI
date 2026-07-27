@@ -122,7 +122,7 @@ def _initial_prompt(
         ),
     }
 
-    return f"""You are Fitto, an AI text fitting editor.
+    return f"""You are TextFitAI, an AI text fitting editor.
 
 Current count:
 - Words: {current_words}

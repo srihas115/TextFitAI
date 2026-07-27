@@ -13,7 +13,7 @@ from counters import char_count, word_count
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
-app = FastAPI(title="Fitto", description="AI-powered text fitting for exact word and character targets.")
+app = FastAPI(title="TextFitAI", description="AI-powered text fitting for exact word and character targets.")
 
 app.add_middleware(
     CORSMiddleware,

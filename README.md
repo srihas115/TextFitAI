@@ -1,10 +1,10 @@
-# Fitto
+# TextFitAI
 
-Fitto is a full-stack AI text editor that trims or expands user text until it lands inside an exact word-count or character-count target. It uses a FastAPI backend, Anthropic Claude through the official `anthropic` Python SDK, and a plain HTML/CSS/JavaScript frontend served by FastAPI.
+TextFitAI is a full-stack AI text editor that trims or expands user text until it lands inside an exact word-count or character-count target. It uses a FastAPI backend, Anthropic Claude through the official `anthropic` Python SDK, and a plain HTML/CSS/JavaScript frontend served by FastAPI.
 
 The app is stateless. It stores no documents, users, sessions, or history. Every `POST /fit` request sends text plus optional constraints, asks Claude for a revision, verifies the result locally, and returns the closest valid output it can produce within four attempts.
 
-## What Fitto Does
+## What TextFitAI Does
 
 - Accepts pasted or typed text in a large editor.
 - Shows live word and character counts on every keystroke.
@@ -43,7 +43,7 @@ README.md
 
 ## Counting Rules
 
-Fitto intentionally uses simple, explicit counting rules so the frontend and backend agree:
+TextFitAI intentionally uses simple, explicit counting rules so the frontend and backend agree:
 
 ```python
 word_count = len(text.split())
@@ -117,7 +117,7 @@ Lengthening prompts tell the model to add supporting detail or examples to exist
 
 ## Setup
 
-Fitto is designed as a bring-your-own-key open source app. The repository does not include, share, proxy, or manage an Anthropic API key for users. Each person who runs Fitto locally should create their own Anthropic API key and store it in their own local `backend/.env` file.
+TextFitAI is designed as a bring-your-own-key open source app. The repository does not include, share, proxy, or manage an Anthropic API key for users. Each person who runs TextFitAI locally should create their own Anthropic API key and store it in their own local `backend/.env` file.
 
 ### 1. Create and activate a virtual environment
 
@@ -166,7 +166,7 @@ For forks, contributors, and self-hosted deployments:
 - Keep `backend/.env.example` committed so users know which variables are required.
 - Keep real `.env` files untracked.
 - Do not paste API keys into source code, issues, pull requests, screenshots, logs, or README examples.
-- If you deploy Fitto to a server, set `ANTHROPIC_API_KEY` as a private environment variable in that hosting provider instead of committing it.
+- If you deploy TextFitAI to a server, set `ANTHROPIC_API_KEY` as a private environment variable in that hosting provider instead of committing it.
 - Every user or deployment owner is responsible for their own Anthropic account, key, usage limits, and billing.
 
 ### 4. Run the app
@@ -217,7 +217,7 @@ For each case it prints the attempt count, whether the target was met, final wor
 
 ## Contributing
 
-Contributions are welcome. Because Fitto is meant to remain a safe open source bring-your-own-key project, please keep API-key handling local and private in every contribution.
+Contributions are welcome. Because TextFitAI is meant to remain a safe open source bring-your-own-key project, please keep API-key handling local and private in every contribution.
 
 Before opening a pull request:
 
@@ -241,8 +241,8 @@ Restart `uvicorn` after editing environment variables.
 
 ### Counts look different from another editor
 
-Fitto uses `len(text.split())` for words and `len(text)` for characters. Other editors may handle punctuation, emojis, invisible characters, or whitespace differently.
+TextFitAI uses `len(text.split())` for words and `len(text)` for characters. Other editors may handle punctuation, emojis, invisible characters, or whitespace differently.
 
 ### The result says `met_target: false`
 
-Claude did not hit the requested range within 4 total attempts. Fitto returns the closest attempt it saw, along with the final verified counts, so you still get the best available revision.
+Claude did not hit the requested range within 4 total attempts. TextFitAI returns the closest attempt it saw, along with the final verified counts, so you still get the best available revision.

@@ -25,7 +25,7 @@ CASES = [
     {
         "name": "tight character range",
         "payload": {
-            "text": "Fitto keeps copy aligned with strict layout limits while preserving meaning.",
+            "text": "TextFitAI keeps copy aligned with strict layout limits while preserving meaning.",
             "min_words": None,
             "max_words": None,
             "min_chars": 95,
