@@ -12,6 +12,7 @@ from counters import char_count, word_count
 
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
+RESOURCES_DIR = BASE_DIR.parent / "resources"
 
 app = FastAPI(title="TextFitAI", description="AI-powered text fitting for exact word and character targets.")
 
@@ -86,6 +87,7 @@ def get_counts(text: str) -> dict[str, int]:
 
 
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+app.mount("/resources", StaticFiles(directory=RESOURCES_DIR), name="resources")
 
 
 @app.get("/")
