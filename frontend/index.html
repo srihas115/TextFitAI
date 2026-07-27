@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
     <main class="app-shell">
       <header class="app-header">
         <div class="brand-lockup" aria-label="TextFitAI">
@@ -71,12 +73,16 @@
             </div>
           </div>
 
-          <button id="fitButton" class="fit-button" type="button">Fit Text</button>
-
-          <section id="revisionSummary" class="revision-summary" aria-live="polite" hidden>
-            <p class="eyebrow">Revision summary</p>
-            <ul id="revisionSummaryList"></ul>
+          <section id="activityPanel" class="activity-panel" aria-live="polite" hidden>
+            <div class="activity-header">
+              <p id="activityLabel" class="eyebrow">AI activity</p>
+              <span id="revisionCounter" class="revision-counter">Revision 0</span>
+            </div>
+            <div id="activityStream" class="activity-stream"></div>
+            <ul id="revisionSummaryList" class="revision-summary-list"></ul>
           </section>
+
+          <button id="fitButton" class="fit-button" type="button">Fit Text</button>
         </aside>
       </section>
     </main>
