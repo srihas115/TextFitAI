@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fafaf9" />
     <title>TextFitAI</title>
+    <link rel="icon" type="image/gif" href="/resources/brand-mark.gif" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
@@ -24,18 +26,41 @@
     <main class="app-shell">
       <header class="app-header">
         <div class="brand-lockup" aria-label="TextFitAI">
-          <span class="brand-mark">T</span>
+          <span class="brand-mark" aria-hidden="true">
+            <img src="/resources/brand-mark.gif" alt="" />
+          </span>
           <div>
-            <p class="eyebrow">AI fitting workspace</p>
+            <p class="eyebrow">Made by Srihas</p>
             <h1 id="app-title">TextFitAI</h1>
           </div>
         </div>
-        <div class="direction-control">
-          <div id="manualDirectionToggle" class="manual-direction-toggle reveal-panel" hidden>
-            <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
-            <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+        <div class="header-actions">
+          <div class="direction-control">
+            <div id="manualDirectionToggle" class="manual-direction-toggle reveal-panel" hidden>
+              <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
+              <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+            </div>
+            <p id="directionPill" class="direction-pill">Auto: fit</p>
           </div>
-          <p id="directionPill" class="direction-pill">Auto: fit</p>
+          <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+            <img src="/resources/dark-mode-svgrepo-com.svg" alt="" aria-hidden="true" />
+          </button>
+          <div class="accent-picker">
+            <button id="accentMenuButton" class="accent-menu-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose accent color">
+              <span id="accentMenuSwatch" class="accent-menu-swatch" aria-hidden="true"></span>
+            </button>
+            <div id="accentMenu" class="accent-menu" role="menu" aria-label="Accent color" hidden>
+              <button class="accent-option is-active" type="button" role="menuitemradio" data-accent="silver" aria-checked="true">Silver</button>
+              <button class="accent-option" type="button" role="menuitemradio" data-accent="purple" aria-checked="false">Purple</button>
+              <button class="accent-option" type="button" role="menuitemradio" data-accent="blue" aria-checked="false">Blue</button>
+              <button class="accent-option" type="button" role="menuitemradio" data-accent="green" aria-checked="false">Green</button>
+              <button class="accent-option" type="button" role="menuitemradio" data-accent="orange" aria-checked="false">Orange</button>
+              <label class="custom-accent-option" for="customAccentInput">
+                <span>Custom</span>
+                <input id="customAccentInput" type="color" value="#a1a1aa" aria-label="Custom accent color" />
+              </label>
+            </div>
+          </div>
         </div>
       </header>
 
