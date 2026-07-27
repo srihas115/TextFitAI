@@ -6,6 +6,8 @@ const statusLine = document.querySelector("#statusLine");
 const directionPill = document.querySelector("#directionPill");
 const wordTargetSummary = document.querySelector("#wordTargetSummary");
 const charTargetSummary = document.querySelector("#charTargetSummary");
+const revisionSummary = document.querySelector("#revisionSummary");
+const revisionSummaryList = document.querySelector("#revisionSummaryList");
 
 const fields = {
   min_words: document.querySelector("#minWords"),
@@ -29,9 +31,9 @@ function readOptionalInt(input) {
 
 function getConstraints() {
   return {
-    min_words: readOptionalInt(fields.min_words),
+    min_words: fields.min_words.value === "" ? 0 : readOptionalInt(fields.min_words),
     max_words: readOptionalInt(fields.max_words),
-    min_chars: readOptionalInt(fields.min_chars),
+    min_chars: fields.min_chars.value === "" ? 1 : readOptionalInt(fields.min_chars),
     max_chars: readOptionalInt(fields.max_chars),
   };
 }
@@ -86,6 +88,23 @@ function validateConstraints(constraints) {
   return "";
 }
 
+function renderRevisionSummary(items) {
+  revisionSummaryList.innerHTML = "";
+
+  if (!Array.isArray(items) || items.length === 0) {
+    revisionSummary.hidden = true;
+    return;
+  }
+
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    revisionSummaryList.append(li);
+  });
+
+  revisionSummary.hidden = false;
+}
+
 textInput.addEventListener("input", updateCounts);
 Object.values(fields).forEach((field) => field.addEventListener("input", updateCounts));
 
@@ -110,6 +129,7 @@ fitButton.addEventListener("click", async () => {
   fitButton.textContent = "Fitting...";
   statusLine.className = "status";
   statusLine.textContent = "TextFitAI is revising against your exact target.";
+  renderRevisionSummary([]);
 
   try {
     const response = await fetch("/fit", {
@@ -125,6 +145,7 @@ fitButton.addEventListener("click", async () => {
 
     textInput.value = data.result;
     updateCounts();
+    renderRevisionSummary(data.revision_summary);
     statusLine.className = data.met_target ? "status" : "status error";
     statusLine.textContent = `${data.met_target ? "Target met" : "Closest result returned"} after ${data.attempts} attempt${data.attempts === 1 ? "" : "s"}: ${data.word_count} words, ${data.char_count} chars.`;
   } catch (error) {

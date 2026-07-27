@@ -42,7 +42,7 @@
           <div class="control-grid">
             <label>
               <span>Min words</span>
-              <input id="minWords" type="number" min="0" inputmode="numeric" placeholder="Any" />
+              <input id="minWords" type="number" min="0" inputmode="numeric" value="0" />
             </label>
             <label>
               <span>Max words</span>
@@ -50,7 +50,7 @@
             </label>
             <label>
               <span>Min chars</span>
-              <input id="minChars" type="number" min="0" inputmode="numeric" placeholder="Any" />
+              <input id="minChars" type="number" min="0" inputmode="numeric" value="1" />
             </label>
             <label>
               <span>Max chars</span>
@@ -72,6 +72,11 @@
           </div>
 
           <button id="fitButton" class="fit-button" type="button">Fit Text</button>
+
+          <section id="revisionSummary" class="revision-summary" aria-live="polite" hidden>
+            <p class="eyebrow">Revision summary</p>
+            <ul id="revisionSummaryList"></ul>
+          </section>
         </aside>
       </section>
     </main>

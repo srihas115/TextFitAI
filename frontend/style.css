@@ -341,6 +341,29 @@ input:focus {
   opacity: 0.72;
 }
 
+.revision-summary {
+  padding: 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.revision-summary[hidden] {
+  display: none;
+}
+
+.revision-summary ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--charcoal);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.revision-summary li + li {
+  margin-top: 6px;
+}
+
 @media (max-width: 960px) {
   .workspace {
     grid-template-columns: 1fr;
