@@ -307,7 +307,14 @@ textarea {
   border: 0;
   outline: none;
   background:
-    linear-gradient(var(--canvas) 31px, var(--hairline) 32px);
+    repeating-linear-gradient(
+      to bottom,
+      var(--canvas) 0,
+      var(--canvas) 25px,
+      var(--hairline) 26px,
+      var(--canvas) 27px,
+      var(--canvas) 32px
+    );
   background-size: 100% 32px;
   color: var(--charcoal);
   font-size: 17px;
@@ -330,7 +337,14 @@ textarea:disabled {
 .editor-panel.is-fitting textarea {
   background:
     linear-gradient(rgba(246, 245, 244, 0.78), rgba(246, 245, 244, 0.78)),
-    linear-gradient(var(--canvas) 31px, var(--hairline) 32px);
+    repeating-linear-gradient(
+      to bottom,
+      var(--canvas) 0,
+      var(--canvas) 25px,
+      var(--hairline) 26px,
+      var(--canvas) 27px,
+      var(--canvas) 32px
+    );
   background-size: 100% 100%, 100% 32px;
   color: rgba(55, 53, 47, 0.62);
 }
