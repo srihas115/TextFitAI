@@ -29,9 +29,15 @@ class FitAttempt:
     revision_summary: list[str]
 
 
-def fit_text(text: str, constraints: FitConstraints) -> FitAttempt:
+def fit_text(
+    text: str,
+    constraints: FitConstraints,
+    *,
+    direction_override: str | None = None,
+    expansion_notes: list[str] | None = None,
+) -> FitAttempt:
     original_check = check_fit(text, constraints)
-    if original_check.met_target:
+    if original_check.met_target and direction_override is None:
         return FitAttempt(
             result=text,
             word_count=original_check.word_count,
@@ -45,7 +51,7 @@ def fit_text(text: str, constraints: FitConstraints) -> FitAttempt:
     try:
         current_words = original_check.word_count
         current_chars = original_check.char_count
-        direction = _direction(current_words, current_chars, constraints)
+        direction = direction_override or _direction(current_words, current_chars, constraints)
         target_summary = _target_summary(constraints)
 
         messages = [
@@ -57,6 +63,7 @@ def fit_text(text: str, constraints: FitConstraints) -> FitAttempt:
                     current_chars=current_chars,
                     direction=direction,
                     target_summary=target_summary,
+                    expansion_notes=expansion_notes or [],
                 ),
             }
         ]
@@ -195,6 +202,7 @@ def _initial_prompt(
     current_chars: int,
     direction: str,
     target_summary: str,
+    expansion_notes: list[str],
 ) -> str:
     direction_rules = {
         "shorten": (
@@ -211,6 +219,15 @@ def _initial_prompt(
             "claims, facts, and structure wherever possible."
         ),
     }
+    notes_block = ""
+    if direction == "lengthen" and expansion_notes:
+        notes = "\n".join(f"- {note}" for note in expansion_notes)
+        notes_block = f"""
+
+User-provided details to incorporate when useful:
+{notes}
+
+Use these notes to add relevant detail, but do not force every note if it would make the revision awkward or exceed the target."""
 
     return f"""You are TextFitAI's writer agent. Your only job is to produce the revised text.
 
@@ -223,6 +240,7 @@ Exact target:
 
 Required direction: {direction}
 {direction_rules[direction]}
+{notes_block}
 
 Output rules:
 - Return only the final revised text.

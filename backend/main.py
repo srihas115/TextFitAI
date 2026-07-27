@@ -31,6 +31,8 @@ class FitRequest(BaseModel):
     max_words: Optional[int] = Field(default=None, ge=0)
     min_chars: Optional[int] = Field(default=1, ge=0)
     max_chars: Optional[int] = Field(default=None, ge=0)
+    direction_override: Optional[str] = Field(default=None, pattern="^(shorten|lengthen)$")
+    expansion_notes: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_ranges(self) -> "FitRequest":
@@ -65,7 +67,12 @@ def fit(payload: FitRequest) -> FitResponse:
     )
 
     try:
-        fitted = fit_text(payload.text, constraints)
+        fitted = fit_text(
+            payload.text,
+            constraints,
+            direction_override=payload.direction_override,
+            expansion_notes=payload.expansion_notes,
+        )
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:

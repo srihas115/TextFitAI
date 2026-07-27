@@ -18,7 +18,13 @@
             <h1 id="app-title">TextFitAI</h1>
           </div>
         </div>
-        <p id="directionPill" class="direction-pill">Auto: fit</p>
+        <div class="direction-control">
+          <p id="directionPill" class="direction-pill">Auto: fit</p>
+          <div id="manualDirectionToggle" class="manual-direction-toggle" hidden>
+            <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
+            <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+          </div>
+        </div>
       </header>
 
       <section class="workspace" aria-labelledby="app-title">
@@ -60,6 +66,13 @@
               <input id="maxChars" type="number" min="0" inputmode="numeric" placeholder="Inclusive max" />
             </label>
           </div>
+
+          <section id="lengthenNotesPanel" class="lengthen-notes-panel" hidden>
+            <label for="lengthenNotes">
+              <span>Details to add</span>
+              <textarea id="lengthenNotes" placeholder="- Mention office hours&#10;- Add more context&#10;- Explain impact"></textarea>
+            </label>
+          </section>
 
           <section id="activityPanel" class="activity-panel" aria-live="polite" hidden>
             <div class="activity-header">

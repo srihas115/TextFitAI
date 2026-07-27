@@ -4,6 +4,10 @@ const charCountEl = document.querySelector("#charCount");
 const fitButton = document.querySelector("#fitButton");
 const statusLine = document.querySelector("#statusLine");
 const directionPill = document.querySelector("#directionPill");
+const manualDirectionToggle = document.querySelector("#manualDirectionToggle");
+const directionOptions = document.querySelectorAll(".direction-option");
+const lengthenNotesPanel = document.querySelector("#lengthenNotesPanel");
+const lengthenNotes = document.querySelector("#lengthenNotes");
 const activityPanel = document.querySelector("#activityPanel");
 const activityLabel = document.querySelector("#activityLabel");
 const revisionCounter = document.querySelector("#revisionCounter");
@@ -32,6 +36,7 @@ let activityMessageIndex = 0;
 let activityLetterIndex = 0;
 let currentActivityLine = null;
 let toastTimer = null;
+let manualDirection = "shorten";
 
 function countWords(text) {
   const trimmed = text.trim();
@@ -71,13 +76,27 @@ function detectDirection() {
   return "fit";
 }
 
+function getEffectiveDirection() {
+  const direction = detectDirection();
+  return direction === "fit" ? manualDirection : direction;
+}
+
 function updateCounts() {
-  const constraints = getConstraints();
   wordCountEl.textContent = countWords(textInput.value);
   charCountEl.textContent = countChars(textInput.value);
   const direction = detectDirection();
   directionPill.textContent = `Auto: ${direction}`;
+  manualDirectionToggle.hidden = direction !== "fit";
+  lengthenNotesPanel.hidden = getEffectiveDirection() !== "lengthen";
   statusLine.className = "status";
+}
+
+function updateManualDirectionButtons() {
+  directionOptions.forEach((button) => {
+    const isActive = button.dataset.direction === manualDirection;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 }
 
 function validateConstraints(constraints) {
@@ -198,12 +217,22 @@ function showCompletionToast(direction, metTarget) {
 
 textInput.addEventListener("input", updateCounts);
 Object.values(fields).forEach((field) => field.addEventListener("input", updateCounts));
+directionOptions.forEach((button) => {
+  button.addEventListener("click", () => {
+    manualDirection = button.dataset.direction;
+    updateManualDirectionButtons();
+    updateCounts();
+  });
+});
 
 fitButton.addEventListener("click", async () => {
   const text = textInput.value;
   const constraints = getConstraints();
   const validationMessage = validateConstraints(constraints);
-  const startingDirection = detectDirection();
+  const autoDirection = detectDirection();
+  const startingDirection = getEffectiveDirection();
+  const directionOverride = autoDirection === "fit" ? startingDirection : null;
+  const expansionNotes = parseExpansionNotes();
 
   if (text.trim() === "") {
     statusLine.className = "status error";
@@ -223,7 +252,12 @@ fitButton.addEventListener("click", async () => {
     const response = await fetch("/fit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, ...constraints }),
+      body: JSON.stringify({
+        text,
+        ...constraints,
+        direction_override: directionOverride,
+        expansion_notes: expansionNotes,
+      }),
     });
 
     const data = await response.json();
@@ -247,4 +281,16 @@ fitButton.addEventListener("click", async () => {
   }
 });
 
+function parseExpansionNotes() {
+  if (getEffectiveDirection() !== "lengthen") {
+    return [];
+  }
+
+  return lengthenNotes.value
+    .split("\n")
+    .map((note) => note.replace(/^\s*[-*•]\s*/, "").trim())
+    .filter(Boolean);
+}
+
+updateManualDirectionButtons();
 updateCounts();

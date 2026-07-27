@@ -153,6 +153,45 @@ h2 {
   font-weight: 600;
 }
 
+.direction-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.manual-direction-toggle {
+  min-height: 36px;
+  padding: 3px;
+  display: inline-flex;
+  gap: 3px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.manual-direction-toggle[hidden] {
+  display: none;
+}
+
+.direction-option {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--slate);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.direction-option.is-active {
+  background: var(--purple);
+  color: #ffffff;
+}
+
 .workspace {
   flex: 1;
   display: grid;
@@ -315,6 +354,44 @@ input {
 }
 
 input:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(86, 69, 212, 0.14);
+}
+
+.lengthen-notes-panel {
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.lengthen-notes-panel[hidden] {
+  display: none;
+}
+
+.lengthen-notes-panel span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--slate);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#lengthenNotes {
+  width: 100%;
+  min-height: 92px;
+  padding: 10px 12px;
+  resize: vertical;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 8px;
+  outline: none;
+  background: var(--canvas);
+  color: var(--charcoal);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+#lengthenNotes:focus {
   border-color: var(--purple);
   box-shadow: 0 0 0 3px rgba(86, 69, 212, 0.14);
 }
