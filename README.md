@@ -1,8 +1,8 @@
 # TextFitAI
 
-TextFitAI is a full-stack AI text editor that trims or expands user text until it lands inside an exact word-count or character-count target. It uses a FastAPI backend, Anthropic Claude through the official `anthropic` Python SDK, and a plain HTML/CSS/JavaScript frontend served by FastAPI.
+TextFitAI is a full-stack AI text editor that trims or expands user text until it lands inside an exact word-count or character-count target. It uses a FastAPI backend, NVIDIA NIM by default, optional Anthropic Claude support, and a plain HTML/CSS/JavaScript frontend served by FastAPI.
 
-The app is stateless. It stores no documents, users, sessions, or history. Every `POST /fit` request sends text plus optional constraints, asks Claude for a revision, verifies the result locally, and returns the closest valid output it can produce within four attempts.
+The app is stateless. It stores no documents, users, sessions, or history. Every `POST /fit` request sends text plus optional constraints, asks the configured AI provider for a revision, verifies the result locally, and returns the closest valid output it can produce within four attempts.
 
 ## What TextFitAI Does
 
@@ -27,7 +27,7 @@ The app is stateless. It stores no documents, users, sessions, or history. Every
 ```text
 backend/
   main.py            FastAPI app, static frontend serving, /fit endpoint
-  ai_fitter.py       Claude prompt construction plus retry/verification loop
+  ai_fitter.py       AI provider calls, prompt construction, and retry/verification loop
   counters.py        Shared backend source of truth for word and character counts
   requirements.txt   Python dependencies
   .env.example       Example environment variables
@@ -143,9 +143,9 @@ py -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. Add your Anthropic API key
+### 3. Add your API key
 
-Create an Anthropic API key from your Anthropic account, then add it locally. Your key stays on your machine and is read only by the FastAPI backend when it calls Claude.
+TextFitAI uses NVIDIA NIM by default. Create a free NVIDIA Developer API key from <https://build.nvidia.com/settings/api-key>, then add it locally. Your key stays on your machine and is read only by the FastAPI backend when it calls the model.
 
 Copy the example file if needed:
 
@@ -156,18 +156,30 @@ cp .env.example .env
 Then edit `backend/.env`:
 
 ```env
-ANTHROPIC_API_KEY=your_real_anthropic_key_here
+AI_PROVIDER=nvidia
+NVIDIA_API_KEY=your_real_nvidia_key_here
+# Optional: choose another NVIDIA-hosted model.
+# NVIDIA_MODEL=meta/llama-3.1-8b-instruct
 ```
 
 Do not commit `.env`. It is covered by `.gitignore`.
+
+To use Anthropic Claude instead, set:
+
+```env
+AI_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your_real_anthropic_key_here
+# Optional: choose another Claude model.
+# ANTHROPIC_MODEL=claude-3-5-sonnet-latest
+```
 
 For forks, contributors, and self-hosted deployments:
 
 - Keep `backend/.env.example` committed so users know which variables are required.
 - Keep real `.env` files untracked.
 - Do not paste API keys into source code, issues, pull requests, screenshots, logs, or README examples.
-- If you deploy TextFitAI to a server, set `ANTHROPIC_API_KEY` as a private environment variable in that hosting provider instead of committing it.
-- Every user or deployment owner is responsible for their own Anthropic account, key, usage limits, and billing.
+- If you deploy TextFitAI to a server, set `NVIDIA_API_KEY` or `ANTHROPIC_API_KEY` as a private environment variable in that hosting provider instead of committing it.
+- Every user or deployment owner is responsible for their own provider account, key, usage limits, and billing.
 
 ### 4. Run the app
 
@@ -212,8 +224,10 @@ For each case it prints the attempt count, whether the target was met, final wor
 - Static assets are available under `/static`.
 - CORS is enabled for common local development origins.
 - The app has no database and no persistent storage.
-- `ANTHROPIC_MODEL` can optionally be set in `.env`; otherwise the backend uses `claude-3-5-sonnet-latest`.
-- The first real `/fit` call requires `ANTHROPIC_API_KEY` to be present in `backend/.env`.
+- `AI_PROVIDER` defaults to `nvidia`. Set it to `anthropic` to use Claude instead.
+- `NVIDIA_MODEL` can optionally be set in `.env`; otherwise the backend uses `meta/llama-3.1-8b-instruct`.
+- `ANTHROPIC_MODEL` can optionally be set when `AI_PROVIDER=anthropic`; otherwise the backend uses `claude-3-5-sonnet-latest`.
+- The first real `/fit` call requires the matching provider key to be present in `backend/.env`.
 
 ## Contributing
 
@@ -229,12 +243,13 @@ Before opening a pull request:
 
 ## Troubleshooting
 
-### `ANTHROPIC_API_KEY is not set`
+### `NVIDIA_API_KEY is not set`
 
 Add your key to `backend/.env`:
 
 ```env
-ANTHROPIC_API_KEY=your_real_anthropic_key_here
+AI_PROVIDER=nvidia
+NVIDIA_API_KEY=your_real_nvidia_key_here
 ```
 
 Restart `uvicorn` after editing environment variables.
