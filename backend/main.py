@@ -26,7 +26,7 @@ app.add_middleware(
 
 class FitRequest(BaseModel):
     text: str = Field(..., min_length=1)
-    min_words: Optional[int] = Field(default=0, ge=0)
+    min_words: Optional[int] = Field(default=1, ge=0)
     max_words: Optional[int] = Field(default=None, ge=0)
     min_chars: Optional[int] = Field(default=1, ge=0)
     max_chars: Optional[int] = Field(default=None, ge=0)

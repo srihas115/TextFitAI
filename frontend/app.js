@@ -4,8 +4,6 @@ const charCountEl = document.querySelector("#charCount");
 const fitButton = document.querySelector("#fitButton");
 const statusLine = document.querySelector("#statusLine");
 const directionPill = document.querySelector("#directionPill");
-const wordTargetSummary = document.querySelector("#wordTargetSummary");
-const charTargetSummary = document.querySelector("#charTargetSummary");
 const activityPanel = document.querySelector("#activityPanel");
 const activityLabel = document.querySelector("#activityLabel");
 const revisionCounter = document.querySelector("#revisionCounter");
@@ -50,7 +48,7 @@ function readOptionalInt(input) {
 
 function getConstraints() {
   return {
-    min_words: fields.min_words.value === "" ? 0 : readOptionalInt(fields.min_words),
+    min_words: fields.min_words.value === "" ? 1 : readOptionalInt(fields.min_words),
     max_words: readOptionalInt(fields.max_words),
     min_chars: fields.min_chars.value === "" ? 1 : readOptionalInt(fields.min_chars),
     max_chars: readOptionalInt(fields.max_chars),
@@ -79,22 +77,7 @@ function updateCounts() {
   charCountEl.textContent = countChars(textInput.value);
   const direction = detectDirection();
   directionPill.textContent = `Auto: ${direction}`;
-  wordTargetSummary.textContent = formatRange(constraints.min_words, constraints.max_words);
-  charTargetSummary.textContent = formatRange(constraints.min_chars, constraints.max_chars);
   statusLine.className = "status";
-}
-
-function formatRange(min, max) {
-  if (min === null && max === null) {
-    return "No limit";
-  }
-  if (min !== null && max !== null) {
-    return `${min} to ${max}`;
-  }
-  if (min !== null) {
-    return `At least ${min}`;
-  }
-  return `At most ${max}`;
 }
 
 function validateConstraints(constraints) {
@@ -102,7 +85,7 @@ function validateConstraints(constraints) {
     return "Min words cannot be greater than max words.";
   }
   if (constraints.min_chars !== null && constraints.max_chars !== null && constraints.min_chars > constraints.max_chars) {
-    return "Min chars cannot be greater than max chars.";
+    return "Min characters cannot be greater than max characters.";
   }
   return "";
 }

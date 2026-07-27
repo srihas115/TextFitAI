@@ -281,6 +281,13 @@ textarea:disabled {
   border-bottom: 1px solid var(--hairline);
 }
 
+.range-note {
+  margin: 6px 0 0;
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .control-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -312,51 +319,6 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(86, 69, 212, 0.14);
 }
 
-.target-summary {
-  display: grid;
-  gap: 10px;
-}
-
-.target-summary > div {
-  min-height: 78px;
-  padding: 14px;
-  position: relative;
-  border: 1px solid var(--hairline);
-  border-radius: 8px;
-  background: var(--surface-soft);
-}
-
-.target-summary p {
-  margin: 0 0 8px;
-  color: var(--slate);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.target-summary strong {
-  display: block;
-  color: var(--charcoal);
-  font-size: 16px;
-  line-height: 1.35;
-}
-
-.summary-dot {
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  border-radius: 3px;
-}
-
-.summary-dot.words {
-  background: var(--orange);
-}
-
-.summary-dot.chars {
-  background: var(--green);
-}
-
 .fit-button {
   width: 100%;
   min-height: 48px;
@@ -383,7 +345,7 @@ input:focus {
 
 .activity-panel {
   min-height: 190px;
-  height: 240px;
+  height: 360px;
   padding: 12px;
   border: 1px solid #252525;
   border-radius: 8px;

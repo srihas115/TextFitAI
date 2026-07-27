@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <textarea id="textInput" placeholder="Paste text here, then set the target range."></textarea>
+          <textarea id="textInput" placeholder="Paste text here, then set an inclusive target range."></textarea>
           <p id="statusLine" class="status" aria-live="polite"></p>
         </section>
 
@@ -39,38 +39,26 @@
           <div class="panel-heading">
             <p class="eyebrow">Target</p>
             <h2>Fit range</h2>
+            <p class="range-note">Bounds are inclusive.</p>
           </div>
 
           <div class="control-grid">
             <label>
               <span>Min words</span>
-              <input id="minWords" type="number" min="0" inputmode="numeric" value="0" />
+              <input id="minWords" type="number" min="0" inputmode="numeric" value="1" />
             </label>
             <label>
               <span>Max words</span>
-              <input id="maxWords" type="number" min="0" inputmode="numeric" placeholder="Any" />
+              <input id="maxWords" type="number" min="0" inputmode="numeric" placeholder="Inclusive max" />
             </label>
             <label>
-              <span>Min chars</span>
+              <span>Min characters</span>
               <input id="minChars" type="number" min="0" inputmode="numeric" value="1" />
             </label>
             <label>
-              <span>Max chars</span>
-              <input id="maxChars" type="number" min="0" inputmode="numeric" placeholder="Any" />
+              <span>Max characters</span>
+              <input id="maxChars" type="number" min="0" inputmode="numeric" placeholder="Inclusive max" />
             </label>
-          </div>
-
-          <div class="target-summary">
-            <div>
-              <span class="summary-dot words"></span>
-              <p>Words</p>
-              <strong id="wordTargetSummary">No limit</strong>
-            </div>
-            <div>
-              <span class="summary-dot chars"></span>
-              <p>Characters</p>
-              <strong id="charTargetSummary">No limit</strong>
-            </div>
           </div>
 
           <section id="activityPanel" class="activity-panel" aria-live="polite" hidden>
