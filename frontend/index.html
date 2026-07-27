@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fitto</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand-lockup" aria-label="Fitto">
+          <span class="brand-mark">F</span>
+          <div>
+            <p class="eyebrow">AI fitting workspace</p>
+            <h1 id="app-title">Fitto</h1>
+          </div>
+        </div>
+        <p id="directionPill" class="direction-pill">Auto: fit</p>
+      </header>
+
+      <section class="workspace" aria-labelledby="app-title">
+        <section class="editor-panel">
+          <div class="editor-toolbar">
+            <label class="textarea-label" for="textInput">Document</label>
+            <div class="counts" aria-live="polite">
+              <span><strong id="wordCount">0</strong> words</span>
+              <span><strong id="charCount">0</strong> chars</span>
+            </div>
+          </div>
+
+          <textarea id="textInput" placeholder="Paste text here, then set the target range."></textarea>
+          <p id="statusLine" class="status" aria-live="polite"></p>
+        </section>
+
+        <aside class="target-panel" aria-label="Target constraints">
+          <div class="panel-heading">
+            <p class="eyebrow">Target</p>
+            <h2>Fit range</h2>
+          </div>
+
+          <div class="control-grid">
+            <label>
+              <span>Min words</span>
+              <input id="minWords" type="number" min="0" inputmode="numeric" placeholder="Any" />
+            </label>
+            <label>
+              <span>Max words</span>
+              <input id="maxWords" type="number" min="0" inputmode="numeric" placeholder="Any" />
+            </label>
+            <label>
+              <span>Min chars</span>
+              <input id="minChars" type="number" min="0" inputmode="numeric" placeholder="Any" />
+            </label>
+            <label>
+              <span>Max chars</span>
+              <input id="maxChars" type="number" min="0" inputmode="numeric" placeholder="Any" />
+            </label>
+          </div>
+
+          <div class="target-summary">
+            <div>
+              <span class="summary-dot words"></span>
+              <p>Words</p>
+              <strong id="wordTargetSummary">No limit</strong>
+            </div>
+            <div>
+              <span class="summary-dot chars"></span>
+              <p>Characters</p>
+              <strong id="charTargetSummary">No limit</strong>
+            </div>
+          </div>
+
+          <button id="fitButton" class="fit-button" type="button">Fit Text</button>
+        </aside>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
