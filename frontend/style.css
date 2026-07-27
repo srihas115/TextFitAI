@@ -140,17 +140,20 @@ h2 {
 }
 
 .direction-pill {
+  width: 150px;
   min-height: 36px;
   margin: 0;
   padding: 8px 12px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   border: 1px solid var(--hairline);
   border-radius: 8px;
   background: var(--lavender);
   color: #391c57;
   font-size: 13px;
   font-weight: 600;
+  transition: transform 180ms ease;
 }
 
 .direction-control {
@@ -163,15 +166,48 @@ h2 {
 
 .manual-direction-toggle {
   min-height: 36px;
-  padding: 3px;
   display: inline-flex;
   gap: 3px;
-  border: 1px solid var(--hairline);
+  overflow: hidden;
+  max-width: 0;
+  padding: 3px 0;
+  border: 0 solid var(--hairline);
   border-radius: 8px;
   background: var(--surface-soft);
+  transform: translateX(-12px);
+  transition:
+    max-width 220ms ease,
+    padding 220ms ease,
+    border-width 220ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
 }
 
-.manual-direction-toggle[hidden] {
+.reveal-panel {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.reveal-panel.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.manual-direction-toggle.reveal-panel {
+  transform: translateX(-12px);
+}
+
+.manual-direction-toggle.reveal-panel.is-visible {
+  max-width: 320px;
+  padding: 3px;
+  border-width: 1px;
+  transform: translateX(0);
+}
+
+.reveal-panel[hidden] {
   display: none;
 }
 
@@ -363,10 +399,6 @@ input:focus {
   border: 1px solid var(--hairline);
   border-radius: 8px;
   background: var(--surface-soft);
-}
-
-.lengthen-notes-panel[hidden] {
-  display: none;
 }
 
 .lengthen-notes-panel span {

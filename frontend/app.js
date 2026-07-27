@@ -37,6 +37,8 @@ let activityLetterIndex = 0;
 let currentActivityLine = null;
 let toastTimer = null;
 let manualDirection = "shorten";
+let activeActivityMessages = activityMessages;
+const visibilityTimers = new WeakMap();
 
 function countWords(text) {
   const trimmed = text.trim();
@@ -86,8 +88,8 @@ function updateCounts() {
   charCountEl.textContent = countChars(textInput.value);
   const direction = detectDirection();
   directionPill.textContent = `Auto: ${direction}`;
-  manualDirectionToggle.hidden = direction !== "fit";
-  lengthenNotesPanel.hidden = getEffectiveDirection() !== "lengthen";
+  setAnimatedVisibility(manualDirectionToggle, direction === "fit");
+  setAnimatedVisibility(lengthenNotesPanel, getEffectiveDirection() === "lengthen");
   statusLine.className = "status";
 }
 
@@ -128,7 +130,7 @@ function renderRevisionSummary(items) {
   });
 }
 
-function startLoadingState() {
+function startLoadingState(expansionNotes) {
   textInput.disabled = true;
   textInput.closest(".editor-panel").classList.add("is-fitting");
   fitButton.disabled = true;
@@ -146,6 +148,7 @@ function startLoadingState() {
   activityLabel.textContent = "AI activity";
   activityStream.hidden = false;
   revisionSummaryList.innerHTML = "";
+  activeActivityMessages = getActivityMessages(expansionNotes);
   activityMessageIndex = 0;
   activityLetterIndex = 0;
   currentActivityLine = createActivityLine();
@@ -170,7 +173,7 @@ function stopLoadingState() {
 }
 
 function streamActivityLetter() {
-  const message = activityMessages[activityMessageIndex];
+  const message = activeActivityMessages[activityMessageIndex];
   const revisionNumber = Math.min(activityMessageIndex + 1, 4);
   revisionCounter.textContent = `Revision ${revisionNumber}/4`;
 
@@ -182,17 +185,55 @@ function streamActivityLetter() {
   }
 
   activityLetterIndex = 0;
-  activityMessageIndex = (activityMessageIndex + 1) % activityMessages.length;
+  activityMessageIndex = (activityMessageIndex + 1) % activeActivityMessages.length;
   currentActivityLine.classList.remove("is-streaming");
   currentActivityLine = createActivityLine();
   activityStream.append(currentActivityLine);
   activityStream.scrollTop = activityStream.scrollHeight;
 }
 
+function getActivityMessages(expansionNotes) {
+  if (!Array.isArray(expansionNotes) || expansionNotes.length === 0) {
+    return activityMessages;
+  }
+
+  return [
+    "Reading the target range.",
+    "Reading details to add.",
+    "Interpreting details.",
+    "Drafting a fitted revision.",
+    "Checking counts with Python.",
+    "Sending checker feedback to the writer.",
+    "Preparing the revision summary.",
+  ];
+}
+
 function createActivityLine() {
   const line = document.createElement("p");
   line.className = "activity-line is-streaming";
   return line;
+}
+
+function setAnimatedVisibility(element, shouldShow) {
+  const existingTimer = visibilityTimers.get(element);
+  if (existingTimer) {
+    window.clearTimeout(existingTimer);
+  }
+
+  if (shouldShow) {
+    element.hidden = false;
+    window.requestAnimationFrame(() => {
+      element.classList.add("is-visible");
+    });
+    return;
+  }
+
+  element.classList.remove("is-visible");
+  const timer = window.setTimeout(() => {
+    element.hidden = true;
+    visibilityTimers.delete(element);
+  }, 190);
+  visibilityTimers.set(element, timer);
 }
 
 function showCompletionToast(direction, metTarget) {
@@ -246,7 +287,7 @@ fitButton.addEventListener("click", async () => {
     return;
   }
 
-  startLoadingState();
+  startLoadingState(expansionNotes);
 
   try {
     const response = await fetch("/fit", {
