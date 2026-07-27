@@ -16,6 +16,14 @@ const revisionSummaryList = document.querySelector("#revisionSummaryList");
 const toast = document.querySelector("#toast");
 const welcomeOverlay = document.querySelector("#welcomeOverlay");
 const welcomeDismissButton = document.querySelector("#welcomeDismissButton");
+const themeToggle = document.querySelector("#themeToggle");
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+const accentPicker = document.querySelector(".accent-picker");
+const accentMenuButton = document.querySelector("#accentMenuButton");
+const accentMenu = document.querySelector("#accentMenu");
+const accentOptions = document.querySelectorAll(".accent-option");
+const customAccentOption = document.querySelector(".custom-accent-option");
+const customAccentInput = document.querySelector("#customAccentInput");
 
 const fields = {
   min_words: document.querySelector("#minWords"),
@@ -42,6 +50,15 @@ let manualDirection = "shorten";
 let activeActivityMessages = activityMessages;
 const visibilityTimers = new WeakMap();
 const welcomeStorageKey = "textfitai-welcome-seen";
+const themeStorageKey = "textfitai-theme";
+const accentStorageKey = "textfitai-accent";
+const customAccentStorageKey = "textfitai-custom-accent";
+const defaultAccent = "silver";
+const defaultCustomAccent = "#a1a1aa";
+const darkThemeColor = "#101010";
+const lightThemeColor = "#fafaf9";
+const minDarkThemeAccentLuminance = 0.28;
+const maxLightThemeAccentLuminance = 0.62;
 
 function countWords(text) {
   const trimmed = text.trim();
@@ -62,6 +79,193 @@ function markWelcomeSeen() {
   } catch {
     // The popup can still be dismissed if localStorage is unavailable.
   }
+}
+
+function getStoredTheme() {
+  try {
+    return window.localStorage.getItem(themeStorageKey);
+  } catch {
+    return null;
+  }
+}
+
+function getPreferredTheme() {
+  const storedTheme = getStoredTheme();
+  if (storedTheme === "dark" || storedTheme === "light") {
+    return storedTheme;
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+  document.documentElement.dataset.theme = theme;
+  themeToggle.setAttribute("aria-pressed", String(isDark));
+  themeToggle.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`);
+
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", isDark ? darkThemeColor : lightThemeColor);
+  }
+
+  applyCustomAccent(customAccentInput.value || defaultCustomAccent);
+}
+
+function saveTheme(theme) {
+  try {
+    window.localStorage.setItem(themeStorageKey, theme);
+  } catch {
+    // Theme switching still works for the current page if localStorage is unavailable.
+  }
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(nextTheme);
+  saveTheme(nextTheme);
+}
+
+function getStoredAccent() {
+  try {
+    return window.localStorage.getItem(accentStorageKey);
+  } catch {
+    return null;
+  }
+}
+
+function getPreferredAccent() {
+  const storedAccent = getStoredAccent();
+  const accentNames = [...Array.from(accentOptions).map((option) => option.dataset.accent), "custom"];
+
+  return accentNames.includes(storedAccent) ? storedAccent : defaultAccent;
+}
+
+function applyAccent(accent) {
+  document.documentElement.dataset.accent = accent;
+  accentMenuButton.setAttribute("aria-label", `Choose accent color, current ${accent}`);
+  customAccentOption.classList.toggle("is-active", accent === "custom");
+
+  accentOptions.forEach((option) => {
+    const isActive = option.dataset.accent === accent;
+    option.classList.toggle("is-active", isActive);
+    option.setAttribute("aria-checked", String(isActive));
+  });
+}
+
+function saveAccent(accent) {
+  try {
+    window.localStorage.setItem(accentStorageKey, accent);
+  } catch {
+    // Accent switching still works for the current page if localStorage is unavailable.
+  }
+}
+
+function selectAccent(accent) {
+  applyAccent(accent);
+  saveAccent(accent);
+  closeAccentMenu();
+}
+
+function getStoredCustomAccent() {
+  try {
+    return window.localStorage.getItem(customAccentStorageKey);
+  } catch {
+    return null;
+  }
+}
+
+function saveCustomAccent(color) {
+  try {
+    window.localStorage.setItem(customAccentStorageKey, color);
+  } catch {
+    // Custom accent still works for the current page if localStorage is unavailable.
+  }
+}
+
+function applyCustomAccent(color) {
+  const safeColor = /^#[0-9a-f]{6}$/i.test(color) ? color : defaultCustomAccent;
+  const cappedColor = capCustomAccentForTheme(safeColor, document.documentElement.dataset.theme);
+  const contrastColor = getReadableTextColor(cappedColor);
+  document.documentElement.style.setProperty("--custom-accent", safeColor);
+  document.documentElement.style.setProperty("--custom-accent-safe", cappedColor);
+  document.documentElement.style.setProperty("--custom-accent-contrast", contrastColor);
+  customAccentInput.value = safeColor;
+}
+
+function capCustomAccentForTheme(color, theme) {
+  const rgb = hexToRgb(color);
+  const luminance = getRelativeLuminance(rgb);
+
+  if (theme === "dark" && luminance < minDarkThemeAccentLuminance) {
+    return mixUntilLuminance(rgb, [255, 255, 255], minDarkThemeAccentLuminance, "min");
+  }
+
+  if (theme !== "dark" && luminance > maxLightThemeAccentLuminance) {
+    return mixUntilLuminance(rgb, [0, 0, 0], maxLightThemeAccentLuminance, "max");
+  }
+
+  return color;
+}
+
+function getReadableTextColor(backgroundColor) {
+  const luminance = getRelativeLuminance(hexToRgb(backgroundColor));
+  const whiteContrast = (1.05) / (luminance + 0.05);
+  const blackContrast = (luminance + 0.05) / 0.05;
+
+  return blackContrast >= whiteContrast ? "#111111" : "#ffffff";
+}
+
+function mixUntilLuminance(startRgb, targetRgb, limit, mode) {
+  let bestRgb = startRgb;
+
+  for (let amount = 0; amount <= 1; amount += 0.02) {
+    const mixedRgb = startRgb.map((channel, index) => Math.round(channel + (targetRgb[index] - channel) * amount));
+    const luminance = getRelativeLuminance(mixedRgb);
+    bestRgb = mixedRgb;
+
+    if ((mode === "min" && luminance >= limit) || (mode === "max" && luminance <= limit)) {
+      break;
+    }
+  }
+
+  return rgbToHex(bestRgb);
+}
+
+function hexToRgb(color) {
+  const normalized = color.replace("#", "");
+  return [0, 2, 4].map((start) => Number.parseInt(normalized.slice(start, start + 2), 16));
+}
+
+function rgbToHex(rgb) {
+  return `#${rgb.map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
+}
+
+function getRelativeLuminance(rgb) {
+  const [red, green, blue] = rgb.map((channel) => {
+    const value = channel / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+}
+
+function openAccentMenu() {
+  accentMenu.hidden = false;
+  accentMenuButton.setAttribute("aria-expanded", "true");
+}
+
+function closeAccentMenu() {
+  accentMenu.hidden = true;
+  accentMenuButton.setAttribute("aria-expanded", "false");
+}
+
+function toggleAccentMenu() {
+  if (accentMenu.hidden) {
+    openAccentMenu();
+    return;
+  }
+
+  closeAccentMenu();
 }
 
 function showWelcomeIfNeeded() {
@@ -121,10 +325,14 @@ function updateCounts() {
   wordCountEl.textContent = countWords(textInput.value);
   charCountEl.textContent = countChars(textInput.value);
   const direction = detectDirection();
-  directionPill.textContent = `Auto: ${direction}`;
+  directionPill.textContent = `Auto: ${formatDirection(direction)}`;
   setAnimatedVisibility(manualDirectionToggle, direction === "fit");
   setAnimatedVisibility(lengthenNotesPanel, getEffectiveDirection() === "lengthen");
   statusLine.className = "status";
+}
+
+function formatDirection(direction) {
+  return direction.charAt(0).toUpperCase() + direction.slice(1);
 }
 
 function updateManualDirectionButtons() {
@@ -300,6 +508,30 @@ directionOptions.forEach((button) => {
   });
 });
 welcomeDismissButton.addEventListener("click", dismissWelcome);
+themeToggle.addEventListener("click", toggleTheme);
+accentMenuButton.addEventListener("click", toggleAccentMenu);
+accentOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    selectAccent(option.dataset.accent);
+  });
+});
+customAccentInput.addEventListener("input", () => {
+  applyCustomAccent(customAccentInput.value);
+  saveCustomAccent(customAccentInput.value);
+  applyAccent("custom");
+  saveAccent("custom");
+});
+document.addEventListener("click", (event) => {
+  if (!accentPicker.contains(event.target)) {
+    closeAccentMenu();
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeAccentMenu();
+    accentMenuButton.focus();
+  }
+});
 
 fitButton.addEventListener("click", async () => {
   const text = textInput.value;
@@ -369,5 +601,8 @@ function parseExpansionNotes() {
 }
 
 updateManualDirectionButtons();
+applyTheme(getPreferredTheme());
+applyCustomAccent(getStoredCustomAccent() || defaultCustomAccent);
+applyAccent(getPreferredAccent());
 updateCounts();
 showWelcomeIfNeeded();
