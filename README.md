@@ -103,9 +103,9 @@ Returns backend counts for a piece of text. This is mainly useful while debuggin
    - shorten if current words or characters exceed a max constraint
    - lengthen if current words or characters are below a min constraint
    - fit if the text is already inside the requested range
-3. Build a Claude prompt containing the current count, exact target, direction, and original text.
-4. Ask Claude to list 3-5 candidate cuts or additions, then output a line containing exactly `---FINAL---`.
-5. Parse only the text after `---FINAL---`.
+3. Build a provider prompt containing the current count, exact target, direction, and original text.
+4. Ask the configured AI provider to return only the final revised text.
+5. Strip common wrappers such as final-text labels, fenced code blocks, or whole-response quotes.
 6. Count the result locally.
 7. If the result misses the target, send a concise retry prompt with the specific miss, such as being 22 words over the maximum.
 8. Retry up to 4 total attempts.
@@ -231,6 +231,48 @@ For each case it prints the attempt count, whether the target was met, final wor
 - `NVIDIA_MODEL` can optionally be set in `.env`; otherwise the backend uses `meta/llama-3.1-8b-instruct`.
 - `ANTHROPIC_MODEL` can optionally be set when `AI_PROVIDER=anthropic`; otherwise the backend uses `claude-3-5-sonnet-latest`.
 - The first real `/fit` call requires the matching provider key to be present in `backend/.env`.
+
+## Feature Status
+
+| Feature | Status | Notes |
+|---|---|---|
+| Exact word/character fitting | Available | Supports optional min/max ranges |
+| NVIDIA NIM provider | Available | Default AI provider |
+| Anthropic provider | Available | Optional provider |
+| `.docx` import/export | Planned | Preserve structure first, styling later |
+| Google Drive support | Planned | Save revised copies instead of overwriting originals |
+| Revision diff view | Planned | Show what changed before replacing text |
+| Target presets | Considering | Common formats such as essays, abstracts, posts, and resume bullets |
+| Tone controls | Considering | Preserve tone or choose a specific style |
+
+## Roadmap
+
+Planned features are tracked here so users and contributors can see what is coming next.
+
+### Planned
+
+- `.docx` import/export
+  - Upload Word documents.
+  - Extract editable text.
+  - Preserve paragraph structure where possible.
+  - Download fitted text as a new `.docx`.
+
+- Google Drive support
+  - Sign in with Google.
+  - Import Google Docs or `.docx` files from Drive.
+  - Save revised output as a copy.
+  - Never overwrite the original document without confirmation.
+
+- Revision diff view
+  - Highlight added and removed text.
+  - Let users review changes before replacing the editor text.
+
+### Considering
+
+- Target presets for common writing formats.
+- Tone controls for concise, formal, friendly, or academic revisions.
+- Batch document fitting.
+- Usage guardrails for large documents.
 
 ## Contributing
 
