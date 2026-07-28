@@ -293,11 +293,15 @@ function readOptionalInt(input) {
 
 function getConstraints() {
   return {
-    min_words: fields.min_words.value === "" ? 1 : readOptionalInt(fields.min_words),
+    min_words: readOptionalInt(fields.min_words),
     max_words: readOptionalInt(fields.max_words),
-    min_chars: fields.min_chars.value === "" ? 1 : readOptionalInt(fields.min_chars),
+    min_chars: readOptionalInt(fields.min_chars),
     max_chars: readOptionalInt(fields.max_chars),
   };
+}
+
+function hasAnyConstraint(constraints) {
+  return Object.values(constraints).some((value) => value !== null);
 }
 
 function detectDirection() {
@@ -539,7 +543,7 @@ fitButton.addEventListener("click", async () => {
   const validationMessage = validateConstraints(constraints);
   const autoDirection = detectDirection();
   const startingDirection = getEffectiveDirection();
-  const directionOverride = autoDirection === "fit" ? startingDirection : null;
+  const directionOverride = autoDirection === "fit" && hasAnyConstraint(constraints) ? startingDirection : null;
   const expansionNotes = parseExpansionNotes();
 
   if (text.trim() === "") {
