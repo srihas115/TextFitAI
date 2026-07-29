@@ -9,7 +9,7 @@ The app is stateless. It stores no documents, users, sessions, or history. Every
 - [Report a bug](https://github.com/srihas115/TextFitAI/issues/new?template=bug_report.yml)
 - [Request a feature](https://github.com/srihas115/TextFitAI/issues/new?template=1-feature-request-form.yml)
 - [View existing issues](https://github.com/srihas115/TextFitAI/issues)
-- [Read the contributing guide](https://github.com/srihas115/TextFitAI?tab=contributing-ov-file)
+- [Read the contributing guide](https://github.com/srihas115/TextFitAI?tab=contributing-ov-file#contributing-to-textfitai)
 
 The issue template setup for this repository was inspired by [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE). Big thanks to them!
 
