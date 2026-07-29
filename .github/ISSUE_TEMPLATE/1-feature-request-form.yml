@@ -1,8 +1,9 @@
 name: Feature Request
-description: Suggest a new idea or enhancement for Boring Notch
+description: Suggest a new idea or enhancement for TextFitAI
 title: "[FEATURE] "
 type: Feature
-labels: []
+labels:
+  - enhancement
 
 body:
   - type: markdown
@@ -10,7 +11,7 @@ body:
       value: |
         ## Feature Request
         
-        Thanks for helping make **Boring Notch** better! Please check [existing requests](https://github.com/TheBoredTeam/boring.notch/issues?q=is%3Aissue) before submitting to avoid duplicates.
+        Thanks for helping make **TextFitAI** better! Please check [existing requests](https://github.com/srihas115/TextFitAI/issues?q=is%3Aissue) before submitting to avoid duplicates.
 
   - type: textarea
     id: problem
@@ -19,7 +20,7 @@ body:
       description: |
         Please provide a clear description of the problem or pain point this feature would address.
         
-        **Example:** "I often miss my next meeting because I work in full-screen mode and can't see the system clock or calendar notifications."
+        **Example:** "I need to fit text to a strict character limit, but I also want to preserve a specific tone."
       placeholder: "I'm frustrated when... or It would be great if..."
     validations:
       required: true
@@ -29,10 +30,10 @@ body:
     attributes:
       label: Describe the solution you'd like
       description: |
-        How should Boring Notch handle this? Describe the behavior, UI, or interaction you imagine in detail.
+        How should TextFitAI handle this? Describe the behavior, UI, or interaction you imagine in detail.
         
-        **Example:** "When a meeting is starting in 5 minutes, the notch could expand slightly to show a countdown timer or the meeting title."
-      placeholder: "I would like the notch to..."
+        **Example:** "Let me choose a tone before fitting the text, then show whether the result meets the word and character limits."
+      placeholder: "I would like TextFitAI to..."
     validations:
       required: true
 
