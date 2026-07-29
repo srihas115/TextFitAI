@@ -4,6 +4,15 @@ TextFitAI is a full-stack AI text editor that trims or expands user text until i
 
 The app is stateless. It stores no documents, users, sessions, or history. Every `POST /fit` request sends text plus optional constraints, asks the configured AI provider for a revision, verifies the result locally, and returns the closest valid output it can produce within four attempts.
 
+## Issues
+
+- [Report a bug](https://github.com/srihas115/TextFitAI/issues/new?template=bug_report.yml)
+- [Request a feature](https://github.com/srihas115/TextFitAI/issues/new?template=1-feature-request-form.yml)
+- [View existing issues](https://github.com/srihas115/TextFitAI/issues)
+- [Read the contributing guide](CONTRIBUTING.md)
+
+The issue template setup for this repository was inspired by [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE).
+
 ## What TextFitAI Does
 
 - Accepts pasted or typed text in a large editor.
@@ -276,7 +285,7 @@ Planned features are tracked here so users and contributors can see what is comi
 
 ## Contributing
 
-Contributions are welcome. Because TextFitAI is meant to remain a safe open source bring-your-own-key project, please keep API-key handling local and private in every contribution.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull requests. Because TextFitAI is meant to remain a safe open source bring-your-own-key project, please keep API-key handling local and private in every contribution.
 
 Before opening a pull request:
 
