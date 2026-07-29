@@ -9,9 +9,9 @@ The app is stateless. It stores no documents, users, sessions, or history. Every
 - [Report a bug](https://github.com/srihas115/TextFitAI/issues/new?template=bug_report.yml)
 - [Request a feature](https://github.com/srihas115/TextFitAI/issues/new?template=1-feature-request-form.yml)
 - [View existing issues](https://github.com/srihas115/TextFitAI/issues)
-- [Read the contributing guide](CONTRIBUTING.md)
+- [Read the contributing guide](https://github.com/srihas115/TextFitAI?tab=contributing-ov-file)
 
-The issue template setup for this repository was inspired by [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE).
+The issue template setup for this repository was inspired by [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE). Big thanks to them!
 
 ## What TextFitAI Does
 
@@ -34,20 +34,34 @@ The issue template setup for this repository was inspired by [TheBoredTeam/borin
 ## Project Structure
 
 ```text
-backend/
-  main.py            FastAPI app, static frontend serving, /fit endpoint
-  ai_fitter.py       AI provider calls, prompt construction, and retry/verification loop
-  counters.py        Shared backend source of truth for word and character counts
-  requirements.txt   Python dependencies
-  .env.example       Example environment variables
-  .env               Local API key file, gitignored
-  test_fitter.py     Small script that hits the running /fit endpoint
-frontend/
-  index.html         Plain HTML app shell
-  style.css          Responsive editor UI
-  app.js             Live counters, validation, and /fit call
-README.md
-.gitignore
+.
+├── .github/
+│   ├── ISSUE_TEMPLATE/        GitHub bug report and feature request forms
+│   ├── FUNDING.yml            GitHub Sponsors/funding links
+│   └── PULL_REQUEST.md        Pull request template
+├── api/
+│   └── index.py               Vercel serverless entrypoint
+├── backend/
+│   ├── main.py                FastAPI app, static frontend serving, /fit endpoint
+│   ├── ai_fitter.py           AI provider calls, prompt construction, retry loop
+│   ├── counters.py            Shared word and character counting logic
+│   ├── fit_checker.py         Local fit validation helpers
+│   ├── requirements.txt       Backend Python dependencies
+│   ├── .env.example           Example environment variables
+│   ├── test_fit_logic.py      Unit tests for fit/counting behavior
+│   └── test_fitter.py         Script that hits the running /fit endpoint
+├── frontend/
+│   ├── index.html             Plain HTML app shell
+│   ├── style.css              Responsive editor UI
+│   └── app.js                 Live counters, validation, and /fit call
+├── resources/                 Icons, logos, and brand assets
+├── CONTRIBUTING.md            Contributor guide
+├── SECURITY.md                Security policy
+├── README.md                  Project documentation
+├── requirements.txt           Root Python dependencies for deployment
+├── vercel.json                Vercel routing/build configuration
+├── preview-local.sh           Local preview helper script
+└── stop-local-servers.sh      Local server cleanup helper script
 ```
 
 ## Counting Rules
