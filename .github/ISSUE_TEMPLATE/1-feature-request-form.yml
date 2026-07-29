@@ -1,7 +1,6 @@
 name: Feature Request
 description: Suggest a new idea or enhancement for TextFitAI
 title: "[FEATURE] "
-type: Feature
 labels:
   - enhancement
 
