@@ -66,8 +66,8 @@ body:
       label: Willingness to contribute
       description: "We love community contributions! Would you be willing to help build this?"
       options:
-        - label: "Yes, I can write the code for this feature"
-        - label: "Yes, I can help with design/mockups"
+        - label: "Yes, I can write the code for this feature."
+        - label: "Yes, I can help with design/mockups."
 
   - type: checkboxes
     id: checklist
@@ -75,7 +75,9 @@ body:
       label: Pre-submission checklist
       description: "Please confirm the following before submitting:"
       options:
-        - label: "I have searched existing issues to ensure this isn't a duplicate"
+        - label: "I have searched existing issues to ensure this isn't a duplicate."
           required: true
-        - label: "I have provided sufficient detail for the team to understand the request"
+        - label: "I have provided detail for the developers to understand the request."
+          required: true
+        - label: "I will follow up here with more details if necesary, or I run the risk of my feature request added."
           required: true

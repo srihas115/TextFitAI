@@ -34,18 +34,9 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: What did you expect to happen?
-      description: Describe what you thought TextFitAI would do.
-      placeholder: For example, "I expected the result to be 100 words or fewer."
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual
-    attributes:
-      label: What happened instead?
-      description: Describe what TextFitAI actually did.
-      placeholder: For example, "The result was 126 words, or I saw an error message."
+      label: What did you expect to happen? What happened instead?
+      description: Describe what you thought TextFitAI would do, and what it actually did.
+      placeholder: For example, "I expected the result to be 100 words or fewer, but the result was 126 words, or I saw an error message."
     validations:
       required: true
 
@@ -62,7 +53,7 @@ body:
         - Opening or running the app
         - Not sure
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: constraints
@@ -75,7 +66,7 @@ body:
         Minimum characters:
         Maximum characters:
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: text-sample
@@ -106,15 +97,6 @@ body:
         - Anthropic Claude
         - Other
 
-  - type: dropdown
-    id: run-location
-    attributes:
-      label: Where are you using TextFitAI?
-      description: Optional. "Local" means you started the app on your own computer, often at http://127.0.0.1:8000. "Hosted" means you opened it on a website.
-      options:
-        - Not sure
-        - On my computer
-        - On a website
 
   - type: input
     id: browser
@@ -142,5 +124,5 @@ body:
     attributes:
       label: Acknowledgements
       options:
-        - label: I have removed API keys, private text, and other sensitive information.
+        - label: I have removed API keys, private text, and other sensitive information from this form.
           required: true
