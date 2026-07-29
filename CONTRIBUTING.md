@@ -2,30 +2,15 @@
 
 Thanks for helping improve TextFitAI. This project is a bring-your-own-key AI text fitting app, so the most important contribution rule is simple: never include private text, API keys, passwords, billing details, or other secrets in issues, pull requests, screenshots, logs, or commits.
 
-The issue and pull request workflow in this repository was inspired by the issue templates from [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE). Credit and thanks to the Boring Notch developers for that structure.
+The issue and pull request workflow in this repository was inspired by the issue templates from [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch/tree/main/.github/ISSUE_TEMPLATE). Credit and thanks to [TheBoredTeam](https://github.com/TheBoredTeam) for the structure!
 
 ## Reporting Bugs
 
 Use the [bug report form](https://github.com/srihas115/TextFitAI/issues/new?template=bug_report.yml) when something does not work the way it should.
 
-Good bug reports are written for humans first. You do not need to be technical. The form asks for:
+Good bug reports are written for humans first. You do not need to be technical. 
 
-- What went wrong.
-- What you were trying to do.
-- What you expected to happen.
-- What happened instead.
-- Where you noticed the problem.
-- What word or character limits you entered.
-
-Optional details are still helpful if you know them:
-
-- A short example text that causes the problem. Use made-up text if your real text is private.
-- A screenshot or copied error message.
-- The browser you used, such as Chrome, Safari, Firefox, or Edge.
-- Whether you used TextFitAI on your own computer or on a website.
-- The AI provider, if you set it up yourself. This is the value of `AI_PROVIDER` in `backend/.env`, such as `nvidia` or `anthropic`.
-
-Before submitting, remove API keys, private writing, names, passwords, and billing details.
+Make sure to remove API keys, private writing, names, passwords, billing details or any sensitive information before submitting.
 
 ## Requesting Features
 
@@ -42,7 +27,7 @@ Please search [existing issues](https://github.com/srihas115/TextFitAI/issues) b
 
 ## Working on Code
 
-Do day-to-day work on the `development` branch. The `main` branch is the production branch watched by Vercel, so changes should only reach `main` intentionally.
+Do day-to-day work on the `dev` branch. The `main` branch is the production branch watched by Vercel, so changes should only reach `main` intentionally.
 
 TextFitAI has a small structure:
 
@@ -90,7 +75,7 @@ For provider behavior, you need a local `backend/.env` with your own `NVIDIA_API
 Before opening a pull request:
 
 - Make sure your PR is not a duplicate of an existing PR or issue.
-- Target the `development` branch unless the maintainer asks for something else.
+- Target the `dev` branch unless the maintainer asks for something else.
 - Give the PR a clear title.
 - Explain what changed and why.
 - Link related issues with `closes #123` when appropriate.
