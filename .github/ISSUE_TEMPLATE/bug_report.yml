@@ -1,0 +1,146 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem with TextFitAI.
+        Please do not include private writing, API keys, passwords, or billing details.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What went wrong?
+      description: In your own words, tell us what happened.
+      placeholder: For example, "I clicked Fit Text and the result was still too long."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: What were you trying to do?
+      description: Tell us the steps you remember. It is okay if they are not perfect.
+      placeholder: |
+        1. I pasted my text.
+        2. I entered a maximum of 100 words.
+        3. I clicked Fit Text.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      description: Describe what you thought TextFitAI would do.
+      placeholder: For example, "I expected the result to be 100 words or fewer."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Describe what TextFitAI actually did.
+      placeholder: For example, "The result was 126 words, or I saw an error message."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did you notice the problem?
+      description: Pick the closest option.
+      options:
+        - Typing or pasting text
+        - Word or character count
+        - Fitting/rewriting the text
+        - Error message
+        - Opening or running the app
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: What limits did you enter?
+      description: Fill in only the boxes you used. Leave the rest blank.
+      placeholder: |
+        Minimum words:
+        Maximum words:
+        Minimum characters:
+        Maximum characters:
+    validations:
+      required: true
+
+  - type: textarea
+    id: text-sample
+    attributes:
+      label: Example text, if you can share it
+      description: Optional. Paste a short example that causes the problem. Please remove names, private details, or anything sensitive.
+      placeholder: A short made-up example is fine if your real text is private.
+
+  - type: textarea
+    id: result-details
+    attributes:
+      label: What did the result show?
+      description: Optional. If the app showed word count, character count, attempts, or "target met", copy those here.
+      placeholder: |
+        Returned word count:
+        Returned character count:
+        Attempts:
+        Met target: yes/no
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: AI provider, if you know it
+      description: Optional. This is the AI service TextFitAI uses behind the scenes. If you set up the app yourself, you may have chosen this in your .env file as AI_PROVIDER. If you are not sure, choose "Not sure".
+      options:
+        - Not sure
+        - NVIDIA NIM
+        - Anthropic Claude
+        - Other
+
+  - type: dropdown
+    id: run-location
+    attributes:
+      label: Where are you using TextFitAI?
+      description: Optional. "Local" means you started the app on your own computer, often at http://127.0.0.1:8000. "Hosted" means you opened it on a website.
+      options:
+        - Not sure
+        - On my computer
+        - On a website
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser, if you know it
+      description: Optional. The browser is the app you use to open websites. Examples are Chrome, Safari, Firefox, and Edge.
+      placeholder: Chrome, Safari, Firefox, Edge, etc.
+
+  - type: input
+    id: os
+    attributes:
+      label: Device or operating system, if you know it
+      description: Optional. This is the kind of device or system you are using.
+      placeholder: Mac, Windows PC, iPhone, Android, etc.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Screenshots or error messages
+      description: Optional. Add a screenshot or copy any error message you saw. Please remove API keys, passwords, or private text first.
+      render: shell
+
+  - type: checkboxes
+    id: acknowledgements
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: I have removed API keys, private text, and other sensitive information.
+          required: true
