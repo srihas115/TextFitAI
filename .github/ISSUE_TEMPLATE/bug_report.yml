@@ -11,6 +11,24 @@ body:
         Please do not include private writing, API keys, passwords, or billing details.
 
   - type: textarea
+    id: text-sample
+    attributes:
+      label: Example text, if you can share it
+      description: Optional. Paste a short example that causes the problem. Please remove names, private details, or anything sensitive.
+      placeholder: A short made-up example is fine if your real text is private.
+
+  - type: textarea
+    id: result-details
+    attributes:
+      label: What did the result show?
+      description: Optional. If the app showed word count, character count, attempts, or "target met", copy those here.
+      placeholder: |
+        Returned word count:
+        Returned character count:
+        Attempts:
+        Met target: yes/no
+
+  - type: textarea
     id: summary
     attributes:
       label: What went wrong?
@@ -67,24 +85,6 @@ body:
         Maximum characters:
     validations:
       required: false
-
-  - type: textarea
-    id: text-sample
-    attributes:
-      label: Example text, if you can share it
-      description: Optional. Paste a short example that causes the problem. Please remove names, private details, or anything sensitive.
-      placeholder: A short made-up example is fine if your real text is private.
-
-  - type: textarea
-    id: result-details
-    attributes:
-      label: What did the result show?
-      description: Optional. If the app showed word count, character count, attempts, or "target met", copy those here.
-      placeholder: |
-        Returned word count:
-        Returned character count:
-        Attempts:
-        Met target: yes/no
 
   - type: dropdown
     id: provider
