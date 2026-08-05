@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from ai_fitter import FitConstraints, fit_text
 from counters import char_count, word_count
+from one_word_summarizer import summarize_to_one_word
 
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
@@ -67,12 +68,15 @@ def fit(payload: FitRequest) -> FitResponse:
     )
 
     try:
-        fitted = fit_text(
-            payload.text,
-            constraints,
-            direction_override=payload.direction_override,
-            expansion_notes=payload.expansion_notes,
-        )
+        if payload.min_words == 1 and payload.max_words == 1:
+            fitted = summarize_to_one_word(payload.text, constraints)
+        else:
+            fitted = fit_text(
+                payload.text,
+                constraints,
+                direction_override=payload.direction_override,
+                expansion_notes=payload.expansion_notes,
+            )
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:

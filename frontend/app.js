@@ -376,12 +376,14 @@ function renderRevisionSummary(items) {
   });
 }
 
-function startLoadingState(expansionNotes) {
+function startLoadingState(expansionNotes, isOneWordSummary) {
   textInput.disabled = true;
   textInput.closest(".editor-panel").classList.add("is-fitting");
   fitButton.disabled = true;
   statusLine.className = "status";
-  statusLine.textContent = "TextFitAI is revising against your exact target.";
+  statusLine.textContent = isOneWordSummary
+    ? "TextFitAI is distilling your text into one word."
+    : "TextFitAI is revising against your exact target.";
 
   let dotCount = 1;
   fitButton.textContent = "Fitting text.";
@@ -394,11 +396,11 @@ function startLoadingState(expansionNotes) {
   activityLabel.textContent = "AI activity";
   activityStream.hidden = false;
   revisionSummaryList.innerHTML = "";
-  activeActivityMessages = getActivityMessages(expansionNotes);
+  activeActivityMessages = getActivityMessages(expansionNotes, isOneWordSummary);
   activityMessageIndex = 0;
   activityLetterIndex = 0;
   currentActivityLine = createActivityLine();
-  revisionCounter.textContent = "Revision 1/4";
+  revisionCounter.textContent = isOneWordSummary ? "One-word mode" : "Revision 1/4";
   activityStream.textContent = "";
   activityStream.append(currentActivityLine);
 
@@ -420,8 +422,12 @@ function stopLoadingState() {
 
 function streamActivityLetter() {
   const message = activeActivityMessages[activityMessageIndex];
-  const revisionNumber = Math.min(activityMessageIndex + 1, 4);
-  revisionCounter.textContent = `Revision ${revisionNumber}/4`;
+  if (activeActivityMessages === oneWordActivityMessages) {
+    revisionCounter.textContent = "One-word mode";
+  } else {
+    const revisionNumber = Math.min(activityMessageIndex + 1, 4);
+    revisionCounter.textContent = `Revision ${revisionNumber}/4`;
+  }
 
   if (activityLetterIndex <= message.length) {
     currentActivityLine.textContent = message.slice(0, activityLetterIndex);
@@ -438,7 +444,17 @@ function streamActivityLetter() {
   activityStream.scrollTop = activityStream.scrollHeight;
 }
 
-function getActivityMessages(expansionNotes) {
+const oneWordActivityMessages = [
+  "Unlocking one-word mode.",
+  "Finding the core idea.",
+  "Returning a single word.",
+];
+
+function getActivityMessages(expansionNotes, isOneWordSummary) {
+  if (isOneWordSummary) {
+    return oneWordActivityMessages;
+  }
+
   if (!Array.isArray(expansionNotes) || expansionNotes.length === 0) {
     return activityMessages;
   }
@@ -545,6 +561,7 @@ fitButton.addEventListener("click", async () => {
   const startingDirection = getEffectiveDirection();
   const directionOverride = autoDirection === "fit" && hasAnyConstraint(constraints) ? startingDirection : null;
   const expansionNotes = parseExpansionNotes();
+  const isOneWordSummary = constraints.min_words === 1 && constraints.max_words === 1;
 
   if (text.trim() === "") {
     statusLine.className = "status error";
@@ -558,7 +575,7 @@ fitButton.addEventListener("click", async () => {
     return;
   }
 
-  startLoadingState(expansionNotes);
+  startLoadingState(expansionNotes, isOneWordSummary);
 
   try {
     const response = await fetch("/fit", {
