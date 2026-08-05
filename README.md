@@ -8,7 +8,8 @@ The app is stateless. It stores no documents, users, sessions, or history. Every
 
 - Official Release deployment link: https://text-fit-ai.vercel.app/
 - Dev [branch](https://github.com/srihas115/TextFitAI/tree/dev) deployment link: https://text-fit-ai-git-dev-srihas115-projects.vercel.app/
-- Mobile dev [branch](https://github.com/srihas115/TextFitAI/tree/mobile-dev): mobile-first UI experiments. This branch displays `(mobile dev preview)` in the app header.
+- Mobile dev [branch](https://github.com/srihas115/TextFitAI/tree/mobile-dev) deployment link: https://text-fit-ai-git-mobile-dev-srihas115-projects.vercel.app/
+  This branch is for mobile-first UI experiments and displays `(mobile dev preview)` in the app header.
 
 ## Issues
 
