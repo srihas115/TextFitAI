@@ -382,8 +382,12 @@ function updateCounts() {
 
 function updateTextActionButtons() {
   const isFitting = textInput.disabled;
-  clearTextButton.disabled = isFitting || textInput.value === "";
+  const hasText = textInput.value !== "";
+
+  clearTextButton.disabled = isFitting;
   tryExampleButton.disabled = isFitting;
+  setAnimatedVisibility(clearTextButton, hasText);
+  setAnimatedVisibility(tryExampleButton, !hasText);
 }
 
 function clearEnteredText() {
@@ -400,13 +404,6 @@ function clearEnteredText() {
 
 function tryExampleText() {
   if (textInput.disabled) {
-    return;
-  }
-
-  if (textInput.value !== "") {
-    statusLine.className = "status error";
-    statusLine.textContent = "Clear the text box before trying the example.";
-    textInput.focus();
     return;
   }
 
