@@ -827,6 +827,7 @@ h2 {
 
 textarea {
   --notebook-line-height: 32px;
+  --notebook-rule-offset: 5px;
   --notebook-rule-position: calc(var(--notebook-line-height) - 1px);
   flex: 1;
   width: 100%;
@@ -845,6 +846,7 @@ textarea {
     );
   background-attachment: local;
   background-origin: content-box;
+  background-position: 0 var(--notebook-rule-offset);
   background-size: 100% var(--notebook-line-height);
   color: var(--charcoal);
   font-size: 17px;
@@ -876,6 +878,7 @@ textarea:disabled {
   );
   background-attachment: scroll, local;
   background-origin: border-box, content-box;
+  background-position: 0 0, 0 var(--notebook-rule-offset);
   background-size: 100% 100%, 100% var(--notebook-line-height);
   color: var(--textarea-disabled-ink);
 }
