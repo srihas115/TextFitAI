@@ -4,6 +4,11 @@ TextFitAI is a full-stack AI text editor that trims or expands user text until i
 
 The app is stateless. It stores no documents, users, sessions, or history. Every `POST /fit` request sends text plus optional constraints, asks the configured AI provider for a revision, verifies the result locally, and returns the closest valid output it can produce within four attempts.
 
+## Deployments
+
+- Official Release deployment link: https://text-fit-ai.vercel.app/
+- Dev [branch](https://github.com/srihas115/TextFitAI/tree/dev) deployment link: https://text-fit-ai-git-dev-srihas115-projects.vercel.app/
+
 ## Issues
 
 - [Report a bug](https://github.com/srihas115/TextFitAI/issues/new?template=bug_report.yml)
