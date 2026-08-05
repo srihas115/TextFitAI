@@ -68,7 +68,10 @@
       <section class="workspace" aria-labelledby="app-title">
         <section class="editor-panel">
           <div class="editor-toolbar">
-            <label class="textarea-label" for="textInput">Document</label>
+            <div class="editor-label-row">
+              <label class="textarea-label" for="textInput">Plain text</label>
+              <span class="input-method-note">(More input methods coming soon!)</span>
+            </div>
             <div class="counts" aria-live="polite">
               <span><strong id="wordCount">0</strong> words</span>
               <span><strong id="charCount">0</strong> chars</span>
@@ -89,12 +92,14 @@ The Ship of Theseus has no single correct answer. Instead, it challenges us to t
 
         <aside class="target-panel" aria-label="Target constraints">
           <div class="panel-heading">
-            <h2 id="directionPill" class="direction-status reveal-panel" hidden>
-              <span id="directionWord" class="direction-word">Shortening to range</span>
-            </h2>
-            <div id="manualDirectionToggle" class="manual-direction-toggle panel-direction-toggle reveal-panel" hidden>
-              <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
-              <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+            <div class="direction-heading-slot">
+              <h2 id="directionPill" class="direction-status reveal-panel" hidden>
+                <span id="directionWord" class="direction-word">Shortening to range</span>
+              </h2>
+              <div id="manualDirectionToggle" class="manual-direction-toggle panel-direction-toggle reveal-panel" hidden>
+                <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
+                <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+              </div>
             </div>
             <p class="range-note">Bounds are inclusive.</p>
           </div>
