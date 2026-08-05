@@ -827,7 +827,7 @@ h2 {
 
 textarea {
   --notebook-line-height: 32px;
-  --notebook-rule-offset: 2px;
+  --notebook-rule-offset: 3px;
   --notebook-rule-position: calc(var(--notebook-line-height) - 1px);
   flex: 1;
   width: 100%;
