@@ -16,6 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 RESOURCES_DIR = BASE_DIR.parent / "resources"
 BRANCH_ENV_KEYS = ("TEXTFITAI_BRANCH", "VERCEL_GIT_COMMIT_REF", "CF_PAGES_BRANCH", "GITHUB_REF_NAME")
+DEV_BRANCH_URL = "https://github.com/srihas115/TextFitAI/tree/dev"
 
 app = FastAPI(title="TextFitAI", description="AI-powered text fitting for exact word and character targets.")
 
@@ -80,6 +81,10 @@ def get_brand_suffix(branch: Optional[str] = None) -> str:
     return "(dev preview)" if branch == "dev" else "(beta)"
 
 
+def get_brand_suffix_url(branch: Optional[str] = None) -> str:
+    return DEV_BRANCH_URL if branch == "dev" else ""
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -88,7 +93,11 @@ def health() -> dict[str, str]:
 @app.get("/app-config")
 def app_config() -> dict[str, str]:
     branch = get_current_branch()
-    return {"branch": branch or "", "brand_suffix": get_brand_suffix(branch)}
+    return {
+        "branch": branch or "",
+        "brand_suffix": get_brand_suffix(branch),
+        "brand_suffix_url": get_brand_suffix_url(branch),
+    }
 
 
 @app.post("/fit", response_model=FitResponse)

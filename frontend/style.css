@@ -415,7 +415,15 @@ h1 {
   color: var(--slate);
   font-size: 9px;
   font-weight: 500;
+  text-decoration: none;
   vertical-align: 0.05em;
+}
+
+.brand-beta[href]:hover,
+.brand-beta[href]:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 h2 {
