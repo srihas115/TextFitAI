@@ -43,13 +43,6 @@
               <span>Feature request</span>
             </a>
           </div>
-          <div class="direction-control">
-            <div id="manualDirectionToggle" class="manual-direction-toggle reveal-panel" hidden>
-              <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
-              <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
-            </div>
-            <p id="directionPill" class="direction-pill">Auto: fit</p>
-          </div>
           <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
             <img src="/resources/dark-mode-svgrepo-com.svg" alt="" aria-hidden="true" />
           </button>
@@ -88,8 +81,13 @@
 
         <aside class="target-panel" aria-label="Target constraints">
           <div class="panel-heading">
-            <p class="eyebrow">Target</p>
-            <h2>Fit range</h2>
+            <h2 id="directionPill" class="direction-status reveal-panel" hidden>
+              <span id="directionWord" class="direction-word">Shortening to range</span>
+            </h2>
+            <div id="manualDirectionToggle" class="manual-direction-toggle panel-direction-toggle reveal-panel" hidden>
+              <button class="direction-option" type="button" data-direction="shorten">Shorten</button>
+              <button class="direction-option" type="button" data-direction="lengthen">Lengthen</button>
+            </div>
             <p class="range-note">Bounds are inclusive.</p>
           </div>
 

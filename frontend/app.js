@@ -4,6 +4,7 @@ const charCountEl = document.querySelector("#charCount");
 const fitButton = document.querySelector("#fitButton");
 const statusLine = document.querySelector("#statusLine");
 const directionPill = document.querySelector("#directionPill");
+const directionWord = document.querySelector("#directionWord");
 const manualDirectionToggle = document.querySelector("#manualDirectionToggle");
 const directionOptions = document.querySelectorAll(".direction-option");
 const lengthenNotesPanel = document.querySelector("#lengthenNotesPanel");
@@ -46,7 +47,9 @@ let activityMessageIndex = 0;
 let activityLetterIndex = 0;
 let currentActivityLine = null;
 let toastTimer = null;
+let directionAnimationTimer = null;
 let manualDirection = "shorten";
+let currentDirectionLabel = "";
 let activeActivityMessages = activityMessages;
 const visibilityTimers = new WeakMap();
 const welcomeStorageKey = "textfitai-welcome-seen";
@@ -329,14 +332,55 @@ function updateCounts() {
   wordCountEl.textContent = countWords(textInput.value);
   charCountEl.textContent = countChars(textInput.value);
   const direction = detectDirection();
-  directionPill.textContent = `Auto: ${formatDirection(direction)}`;
+  updateDirectionDisplay(direction);
+  setAnimatedVisibility(directionPill, direction !== "fit");
   setAnimatedVisibility(manualDirectionToggle, direction === "fit");
   setAnimatedVisibility(lengthenNotesPanel, getEffectiveDirection() === "lengthen");
   statusLine.className = "status";
 }
 
-function formatDirection(direction) {
-  return direction.charAt(0).toUpperCase() + direction.slice(1);
+function updateDirectionDisplay(direction) {
+  const nextLabel = formatDirectionStatus(direction);
+  directionPill.setAttribute("aria-label", nextLabel || "Manual direction");
+
+  if (nextLabel === "") {
+    currentDirectionLabel = "";
+    directionWord.textContent = "";
+    directionWord.classList.remove("is-changing");
+    window.clearTimeout(directionAnimationTimer);
+    return;
+  }
+
+  if (nextLabel === currentDirectionLabel) {
+    return;
+  }
+
+  window.clearTimeout(directionAnimationTimer);
+
+  if (currentDirectionLabel === "") {
+    directionWord.textContent = nextLabel;
+    currentDirectionLabel = nextLabel;
+    return;
+  }
+
+  directionWord.classList.add("is-changing");
+  directionAnimationTimer = window.setTimeout(() => {
+    directionWord.textContent = nextLabel;
+    currentDirectionLabel = nextLabel;
+    window.requestAnimationFrame(() => {
+      directionWord.classList.remove("is-changing");
+    });
+  }, 120);
+}
+
+function formatDirectionStatus(direction) {
+  const labels = {
+    shorten: "Shortening to range",
+    lengthen: "Lengthening to range",
+    fit: "",
+  };
+
+  return labels[direction] || "";
 }
 
 function updateManualDirectionButtons() {
