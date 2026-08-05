@@ -196,13 +196,15 @@ h1,
 h2,
 .eyebrow,
 .textarea-label,
+.input-method-note,
 .control-grid span,
 .range-note,
 .counts strong,
 .welcome-dialog p:not(.eyebrow),
 .app-header,
 .brand-mark,
-.direction-pill,
+.direction-status,
+.direction-word,
 .issue-action-link,
 .manual-direction-toggle,
 .direction-option,
@@ -421,43 +423,12 @@ h2 {
   line-height: 1.25;
 }
 
-.direction-pill {
-  width: 150px;
-  min-height: 36px;
-  margin: 0;
-  padding: 8px 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--hairline);
-  border-radius: 8px;
-  background: var(--accent-soft);
-  color: var(--accent-soft-ink);
-  font-size: 13px;
-  font-weight: 600;
-  transition:
-    background-color 240ms ease,
-    background 240ms ease,
-    border-color 240ms ease,
-    box-shadow 240ms ease,
-    color 240ms ease,
-    transform 180ms ease;
-}
-
 .header-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
   flex-wrap: wrap;
-}
-
-.direction-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
 }
 
 .issue-actions {
@@ -795,12 +766,28 @@ h2 {
   background: var(--surface);
 }
 
+.editor-label-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .textarea-label,
 .control-grid span {
   display: block;
   color: var(--slate);
   font-size: 13px;
   font-weight: 600;
+}
+
+.editor-label-row .textarea-label {
+  font-size: 16px;
+}
+
+.input-method-note {
+  color: var(--stone);
+  font-size: 10px;
+  font-weight: 400;
 }
 
 .counts {
@@ -906,8 +893,61 @@ textarea:disabled {
 }
 
 .panel-heading {
+  min-height: 83px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--hairline);
+}
+
+.direction-heading-slot {
+  position: relative;
+  min-height: 36px;
+}
+
+.direction-status {
+  position: absolute;
+  inset: 0 auto auto 0;
+  margin: 0;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.direction-word {
+  min-width: 20ch;
+  display: inline-block;
+  color: inherit;
+  transform: translateY(0);
+  opacity: 1;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    color 240ms ease;
+}
+
+.direction-word.is-changing {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.panel-direction-toggle.manual-direction-toggle.reveal-panel {
+  position: absolute;
+  inset: 0 auto auto 0;
+  max-width: 320px;
+  padding: 3px;
+  border-width: 1px;
+  transform: translateY(6px);
+  transition:
+    background-color 240ms ease,
+    background 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    color 240ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.panel-direction-toggle.manual-direction-toggle.reveal-panel.is-visible {
+  transform: translateY(0);
 }
 
 .range-note {
@@ -1051,7 +1091,8 @@ input:focus {
   .welcome-dialog p:not(.eyebrow),
   .app-header,
   .brand-mark,
-  .direction-pill,
+  .direction-status,
+  .direction-word,
   .issue-action-link,
   .manual-direction-toggle,
   .direction-option,
@@ -1250,8 +1291,7 @@ input:focus {
   }
 
   .header-actions,
-  .issue-actions,
-  .direction-control {
+  .issue-actions {
     width: 100%;
     justify-content: stretch;
   }
@@ -1260,7 +1300,6 @@ input:focus {
     flex: 1 1 150px;
   }
 
-  .direction-pill,
   .counts span {
     width: 100%;
   }
