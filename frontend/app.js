@@ -1,6 +1,8 @@
 const textInput = document.querySelector("#textInput");
 const wordCountEl = document.querySelector("#wordCount");
 const charCountEl = document.querySelector("#charCount");
+const tryExampleButton = document.querySelector("#tryExampleButton");
+const clearTextButton = document.querySelector("#clearTextButton");
 const fitButton = document.querySelector("#fitButton");
 const statusLine = document.querySelector("#statusLine");
 const directionPill = document.querySelector("#directionPill");
@@ -63,6 +65,15 @@ const darkThemeColor = "#101010";
 const lightThemeColor = "#fafaf9";
 const minDarkThemeAccentLuminance = 0.28;
 const maxLightThemeAccentLuminance = 0.62;
+const exampleText = `Imagine a famous wooden ship that has been preserved for many years because of its history. As time passes, the wood begins to rot, so each damaged plank is replaced with a new one. This process continues until every original plank has been exchanged.
+
+At that point, would you still consider it to be the same ship, even though none of its original parts remain?
+
+Now imagine that someone had carefully saved all of the original planks as they were removed and later used them to rebuild the ship exactly as it once was.
+
+Which one is the true ship: the one that was continuously repaired, or the one rebuilt from the original materials? Is the original ship neither of them, or somehow both?
+
+The Ship of Theseus has no single correct answer. Instead, it challenges us to think about what truly defines an object's identity and whether something can remain the same even after every part of it has changed.`;
 
 function countWords(text) {
   const trimmed = text.trim();
@@ -366,6 +377,41 @@ function updateCounts() {
   setAnimatedVisibility(manualDirectionToggle, direction === "fit");
   setAnimatedVisibility(lengthenNotesPanel, getEffectiveDirection() === "lengthen");
   statusLine.className = "status";
+  updateTextActionButtons();
+}
+
+function updateTextActionButtons() {
+  const isFitting = textInput.disabled;
+  const hasText = textInput.value !== "";
+
+  clearTextButton.disabled = isFitting;
+  tryExampleButton.disabled = isFitting;
+  setAnimatedVisibility(clearTextButton, hasText);
+  setAnimatedVisibility(tryExampleButton, !hasText);
+}
+
+function clearEnteredText() {
+  if (textInput.disabled || textInput.value === "") {
+    return;
+  }
+
+  textInput.value = "";
+  statusLine.className = "status";
+  statusLine.textContent = "Text cleared.";
+  updateCounts();
+  textInput.focus();
+}
+
+function tryExampleText() {
+  if (textInput.disabled) {
+    return;
+  }
+
+  textInput.value = exampleText;
+  statusLine.className = "status";
+  statusLine.textContent = "Example loaded.";
+  updateCounts();
+  textInput.focus();
 }
 
 function updateDirectionDisplay(direction) {
@@ -453,6 +499,7 @@ function startLoadingState(expansionNotes, isOneWordSummary) {
   textInput.disabled = true;
   textInput.closest(".editor-panel").classList.add("is-fitting");
   fitButton.disabled = true;
+  updateTextActionButtons();
   statusLine.className = "status";
   statusLine.textContent = isOneWordSummary
     ? "TextFitAI is distilling your text into one word."
@@ -490,6 +537,7 @@ function stopLoadingState() {
   textInput.disabled = false;
   textInput.closest(".editor-panel").classList.remove("is-fitting");
   fitButton.disabled = false;
+  updateTextActionButtons();
   fitButton.textContent = "Fit Text";
 }
 
@@ -592,6 +640,8 @@ function showCompletionToast(direction, metTarget) {
 }
 
 textInput.addEventListener("input", updateCounts);
+tryExampleButton.addEventListener("click", tryExampleText);
+clearTextButton.addEventListener("click", clearEnteredText);
 Object.values(fields).forEach((field) => field.addEventListener("input", updateCounts));
 directionOptions.forEach((button) => {
   button.addEventListener("click", () => {

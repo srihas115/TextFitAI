@@ -219,6 +219,8 @@ h2,
 .editor-panel,
 .target-panel,
 .editor-toolbar,
+.editor-toolbar-actions,
+.editor-action-button,
 .counts span,
 .status,
 .panel-heading,
@@ -234,6 +236,7 @@ h2,
     color 240ms ease,
     filter 240ms ease,
     opacity 180ms ease,
+    transform 180ms ease,
     --grid-line-vertical 240ms ease,
     --grid-line-horizontal 240ms ease;
 }
@@ -780,6 +783,93 @@ h2 {
   gap: 2px;
 }
 
+.editor-toolbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.text-actions {
+  min-width: 126px;
+  min-height: 34px;
+  display: grid;
+  grid-template-areas: "action";
+  align-items: center;
+  justify-items: end;
+}
+
+.editor-action-button {
+  grid-area: action;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--canvas);
+  color: var(--slate);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.editor-action-button.reveal-panel {
+  pointer-events: none;
+  transition:
+    background-color 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    color 240ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.editor-action-button.reveal-panel.is-visible {
+  pointer-events: auto;
+}
+
+#tryExampleButton.reveal-panel {
+  transform: translateY(10px);
+}
+
+#tryExampleButton.reveal-panel.is-visible {
+  transform: translateY(0);
+}
+
+#clearTextButton.reveal-panel {
+  transform: translateY(-10px);
+}
+
+#clearTextButton.reveal-panel.is-visible {
+  transform: translateY(0);
+}
+
+.editor-action-button:hover {
+  border-color: var(--hairline-strong);
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+#tryExampleButton.reveal-panel.is-visible:hover,
+#clearTextButton.reveal-panel.is-visible:hover {
+  transform: translateY(-1px);
+}
+
+.editor-action-button:focus-visible {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.editor-action-button:disabled {
+  cursor: not-allowed;
+  color: var(--stone);
+  opacity: 0.58;
+  transform: none;
+  box-shadow: none;
+}
+
 .textarea-label,
 .control-grid span {
   display: block;
@@ -1115,6 +1205,7 @@ input:focus {
   .editor-panel,
   .target-panel,
   .editor-toolbar,
+  .editor-action-button,
   .counts span,
   .status,
   .panel-heading,
@@ -1299,13 +1390,24 @@ input:focus {
   }
 
   .header-actions,
+  .editor-toolbar-actions,
   .issue-actions {
     width: 100%;
     justify-content: stretch;
   }
 
+  .text-actions {
+    width: 100%;
+    justify-items: stretch;
+  }
+
   .issue-action-link {
     flex: 1 1 150px;
+  }
+
+  .editor-action-button {
+    flex: 1 1 140px;
+    width: 100%;
   }
 
   .counts span {

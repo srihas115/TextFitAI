@@ -72,21 +72,19 @@
               <label class="textarea-label" for="textInput">Plain text</label>
               <span class="input-method-note">(More input methods coming soon!)</span>
             </div>
-            <div class="counts" aria-live="polite">
-              <span><strong id="wordCount">0</strong> words</span>
-              <span><strong id="charCount">0</strong> chars</span>
+            <div class="editor-toolbar-actions">
+              <div class="text-actions" role="group" aria-label="Text input actions">
+                <button id="tryExampleButton" class="editor-action-button reveal-panel" type="button" hidden>Try an example!</button>
+                <button id="clearTextButton" class="editor-action-button reveal-panel" type="button" hidden>Clear</button>
+              </div>
+              <div class="counts" aria-live="polite">
+                <span><strong id="wordCount">0</strong> words</span>
+                <span><strong id="charCount">0</strong> chars</span>
+              </div>
             </div>
           </div>
 
-          <textarea id="textInput" placeholder="Paste text here and set a range...">Imagine a famous wooden ship that has been preserved for many years because of its history. As time passes, the wood begins to rot, so each damaged plank is replaced with a new one. This process continues until every original plank has been exchanged.
-
-At that point, would you still consider it to be the same ship, even though none of its original parts remain?
-
-Now imagine that someone had carefully saved all of the original planks as they were removed and later used them to rebuild the ship exactly as it once was.
-
-Which one is the true ship: the one that was continuously repaired, or the one rebuilt from the original materials? Is the original ship neither of them, or somehow both?
-
-The Ship of Theseus has no single correct answer. Instead, it challenges us to think about what truly defines an object's identity and whether something can remain the same even after every part of it has changed.</textarea>
+          <textarea id="textInput" placeholder="Paste text here and set a range..."></textarea>
           <p id="statusLine" class="status" aria-live="polite"></p>
         </section>
 
