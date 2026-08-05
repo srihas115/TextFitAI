@@ -826,6 +826,9 @@ h2 {
 }
 
 textarea {
+  --notebook-line-height: 32px;
+  --notebook-rule-offset: 0px;
+  --notebook-rule-position: calc(var(--notebook-line-height) - 1px);
   flex: 1;
   width: 100%;
   min-height: 460px;
@@ -837,15 +840,17 @@ textarea {
     repeating-linear-gradient(
       to bottom,
       var(--canvas) 0,
-      var(--canvas) 25px,
-      var(--hairline) 26px,
-      var(--canvas) 27px,
-      var(--canvas) 32px
+      var(--canvas) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-line-height)
     );
-  background-size: 100% 32px;
+  background-attachment: local;
+  background-origin: content-box;
+  background-position: 0 var(--notebook-rule-offset);
+  background-size: 100% var(--notebook-line-height);
   color: var(--charcoal);
   font-size: 17px;
-  line-height: 32px;
+  line-height: var(--notebook-line-height);
 }
 
 textarea::placeholder,
@@ -867,12 +872,14 @@ textarea:disabled {
     repeating-linear-gradient(
       to bottom,
       var(--canvas) 0,
-      var(--canvas) 25px,
-      var(--hairline) 26px,
-      var(--canvas) 27px,
-      var(--canvas) 32px
+      var(--canvas) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-line-height)
   );
-  background-size: 100% 100%, 100% 32px;
+  background-attachment: scroll, local;
+  background-origin: border-box, content-box;
+  background-position: 0 0, 0 var(--notebook-rule-offset);
+  background-size: 100% 100%, 100% var(--notebook-line-height);
   color: var(--textarea-disabled-ink);
 }
 
