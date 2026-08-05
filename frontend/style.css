@@ -827,6 +827,7 @@ h2 {
 
 textarea {
   --notebook-line-height: 32px;
+  --notebook-rule-position: calc(var(--notebook-line-height) - 1px);
   flex: 1;
   width: 100%;
   min-height: 460px;
@@ -838,10 +839,9 @@ textarea {
     repeating-linear-gradient(
       to bottom,
       var(--canvas) 0,
-      var(--canvas) 25px,
-      var(--hairline) 26px,
-      var(--canvas) 27px,
-      var(--canvas) 32px
+      var(--canvas) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-line-height)
     );
   background-attachment: local;
   background-origin: content-box;
@@ -870,10 +870,9 @@ textarea:disabled {
     repeating-linear-gradient(
       to bottom,
       var(--canvas) 0,
-      var(--canvas) 25px,
-      var(--hairline) 26px,
-      var(--canvas) 27px,
-      var(--canvas) 32px
+      var(--canvas) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-rule-position),
+      var(--hairline) var(--notebook-line-height)
   );
   background-attachment: scroll, local;
   background-origin: border-box, content-box;
