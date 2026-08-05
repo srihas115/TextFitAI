@@ -792,13 +792,16 @@ h2 {
 }
 
 .text-actions {
-  display: flex;
+  min-width: 126px;
+  min-height: 34px;
+  display: grid;
+  grid-template-areas: "action";
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  justify-items: end;
 }
 
 .editor-action-button {
+  grid-area: action;
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid var(--hairline);
@@ -810,10 +813,46 @@ h2 {
   font-weight: 600;
 }
 
+.editor-action-button.reveal-panel {
+  pointer-events: none;
+  transition:
+    background-color 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    color 240ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.editor-action-button.reveal-panel.is-visible {
+  pointer-events: auto;
+}
+
+#tryExampleButton.reveal-panel {
+  transform: translateY(10px);
+}
+
+#tryExampleButton.reveal-panel.is-visible {
+  transform: translateY(0);
+}
+
+#clearTextButton.reveal-panel {
+  transform: translateY(-10px);
+}
+
+#clearTextButton.reveal-panel.is-visible {
+  transform: translateY(0);
+}
+
 .editor-action-button:hover {
   border-color: var(--hairline-strong);
   color: var(--ink);
   box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+#tryExampleButton.reveal-panel.is-visible:hover,
+#clearTextButton.reveal-panel.is-visible:hover {
   transform: translateY(-1px);
 }
 
@@ -1166,6 +1205,7 @@ input:focus {
   .editor-panel,
   .target-panel,
   .editor-toolbar,
+  .editor-action-button,
   .counts span,
   .status,
   .panel-heading,
@@ -1358,6 +1398,7 @@ input:focus {
 
   .text-actions {
     width: 100%;
+    justify-items: stretch;
   }
 
   .issue-action-link {
@@ -1366,6 +1407,7 @@ input:focus {
 
   .editor-action-button {
     flex: 1 1 140px;
+    width: 100%;
   }
 
   .counts span {
