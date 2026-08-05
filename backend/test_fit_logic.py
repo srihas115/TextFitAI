@@ -8,7 +8,10 @@ sys.path.insert(0, str(BACKEND_DIR))
 from ai_fitter import _extract_final_text, fit_text  # noqa: E402
 from counters import char_count, counts, word_count  # noqa: E402
 from fit_checker import FitConstraints, check_fit  # noqa: E402
-from main import FitRequest  # noqa: E402
+from main import FitRequest, app  # noqa: E402
+from one_word_summarizer import OneWordSummary, _extract_one_word, summarize_to_one_word  # noqa: E402
+
+from fastapi.testclient import TestClient  # noqa: E402
 
 
 class CounterTests(unittest.TestCase):
@@ -59,6 +62,84 @@ class AiFitterTests(unittest.TestCase):
         self.assertEqual(_extract_final_text("---FINAL---\nRevised text"), "Revised text")
         self.assertEqual(_extract_final_text("```\nRevised text\n```"), "Revised text")
         self.assertEqual(_extract_final_text('"Revised text"'), "Revised text")
+
+
+class OneWordSummarizerTests(unittest.TestCase):
+    def test_extract_one_word_strips_labels_and_extra_words(self) -> None:
+        self.assertEqual(_extract_one_word("Summary: quiet confidence", fallback_text="unused"), "quiet")
+
+    def test_summarizes_once_and_returns_strict_one_word(self) -> None:
+        import one_word_summarizer
+
+        calls = []
+
+        def fake_create_client() -> object:
+            return object()
+
+        def fake_call_ai(client: object, messages: list[dict[str, str]], *, role: str) -> str:
+            calls.append((client, messages, role))
+            return "Summary: momentum and clarity"
+
+        original_create_client = one_word_summarizer._create_ai_client
+        original_call_ai = one_word_summarizer._call_ai
+        original_close_client = one_word_summarizer._close_ai_client
+        one_word_summarizer._create_ai_client = fake_create_client
+        one_word_summarizer._call_ai = fake_call_ai
+        one_word_summarizer._close_ai_client = lambda client: None
+
+        try:
+            result = summarize_to_one_word(
+                "The team found a clear path forward after the launch.",
+                FitConstraints(min_words=1, max_words=1),
+            )
+        finally:
+            one_word_summarizer._create_ai_client = original_create_client
+            one_word_summarizer._call_ai = original_call_ai
+            one_word_summarizer._close_ai_client = original_close_client
+
+        self.assertEqual(result.result, "momentum")
+        self.assertEqual(result.word_count, 1)
+        self.assertEqual(result.attempt, 1)
+        self.assertTrue(result.met_target)
+        self.assertEqual(len(calls), 1)
+
+
+class FitEndpointTests(unittest.TestCase):
+    def test_exact_one_word_limits_use_secret_summarizer(self) -> None:
+        import main
+
+        calls = []
+
+        def fake_summarize(text: str, constraints: FitConstraints) -> OneWordSummary:
+            calls.append((text, constraints))
+            return OneWordSummary(
+                result="Focus",
+                word_count=1,
+                char_count=5,
+                attempt=1,
+                met_target=True,
+                revision_summary=["Secret one-word summary"],
+            )
+
+        original_summarize = main.summarize_to_one_word
+        main.summarize_to_one_word = fake_summarize
+
+        try:
+            response = TestClient(app).post(
+                "/fit",
+                json={
+                    "text": "Please condense this whole idea into one strong concept.",
+                    "min_words": 1,
+                    "max_words": 1,
+                },
+            )
+        finally:
+            main.summarize_to_one_word = original_summarize
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["result"], "Focus")
+        self.assertEqual(response.json()["attempts"], 1)
+        self.assertEqual(len(calls), 1)
 
 
 if __name__ == "__main__":
