@@ -8,6 +8,7 @@ The app is stateless. It stores no documents, users, sessions, or history. Every
 
 - Official Release deployment link: https://text-fit-ai.vercel.app/
 - Dev [branch](https://github.com/srihas115/TextFitAI/tree/dev) deployment link: https://text-fit-ai-git-dev-srihas115-projects.vercel.app/
+- Mobile dev [branch](https://github.com/srihas115/TextFitAI/tree/mobile-dev): mobile-first UI experiments. This branch displays `(mobile dev preview)` in the app header.
 
 ## Issues
 
@@ -249,6 +250,7 @@ For each case it prints the attempt count, whether the target was met, final wor
 ## Local Development Notes
 
 - Do day-to-day development on the `development` branch.
+- Use the `mobile-dev` branch for mobile website UI/UX work that should keep the same app functionality and controls while testing phone-specific layout changes.
 - The `main` branch is the production branch watched by Vercel; pushing or merging into `main` can trigger a production deployment.
 - When changes are ready to deploy, merge `development` into `main` intentionally.
 - The frontend is served by FastAPI from `frontend/`.
