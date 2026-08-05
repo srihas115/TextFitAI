@@ -9,7 +9,7 @@ sys.path.insert(0, str(BACKEND_DIR))
 from ai_fitter import _extract_final_text, fit_text  # noqa: E402
 from counters import char_count, counts, word_count  # noqa: E402
 from fit_checker import FitConstraints, check_fit  # noqa: E402
-from main import FitRequest, app, get_brand_suffix  # noqa: E402
+from main import DEV_BRANCH_URL, FitRequest, app, get_brand_suffix, get_brand_suffix_url  # noqa: E402
 from one_word_summarizer import OneWordSummary, _extract_one_word, summarize_to_one_word  # noqa: E402
 
 from fastapi.testclient import TestClient  # noqa: E402
@@ -54,6 +54,8 @@ class AppConfigTests(unittest.TestCase):
     def test_brand_suffix_is_dev_preview_only_on_dev_branch(self) -> None:
         self.assertEqual(get_brand_suffix("dev"), "(dev preview)")
         self.assertEqual(get_brand_suffix("main"), "(beta)")
+        self.assertEqual(get_brand_suffix_url("dev"), DEV_BRANCH_URL)
+        self.assertEqual(get_brand_suffix_url("main"), "")
 
     def test_app_config_uses_deployment_branch_env(self) -> None:
         with patch.dict("os.environ", {"VERCEL_GIT_COMMIT_REF": "main"}, clear=False):
@@ -61,6 +63,7 @@ class AppConfigTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["brand_suffix"], "(beta)")
+        self.assertEqual(response.json()["brand_suffix_url"], "")
 
 
 class AiFitterTests(unittest.TestCase):

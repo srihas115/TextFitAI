@@ -96,6 +96,18 @@ async function applyBrandSuffix() {
     if (typeof config.brand_suffix === "string" && config.brand_suffix.trim() !== "") {
       brandBeta.textContent = config.brand_suffix;
     }
+
+    if (typeof config.brand_suffix_url === "string" && config.brand_suffix_url.trim() !== "") {
+      brandBeta.href = config.brand_suffix_url;
+      brandBeta.target = "_blank";
+      brandBeta.rel = "noreferrer";
+      brandBeta.setAttribute("aria-label", `${brandBeta.textContent} branch on GitHub`);
+    } else {
+      brandBeta.removeAttribute("href");
+      brandBeta.removeAttribute("target");
+      brandBeta.removeAttribute("rel");
+      brandBeta.removeAttribute("aria-label");
+    }
   } catch {
     // The static fallback is the main-branch label.
   }
