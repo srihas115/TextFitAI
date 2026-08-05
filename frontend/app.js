@@ -17,6 +17,7 @@ const revisionSummaryList = document.querySelector("#revisionSummaryList");
 const toast = document.querySelector("#toast");
 const welcomeOverlay = document.querySelector("#welcomeOverlay");
 const welcomeDismissButton = document.querySelector("#welcomeDismissButton");
+const brandBeta = document.querySelector("#brandBeta");
 const themeToggle = document.querySelector("#themeToggle");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const accentPicker = document.querySelector(".accent-picker");
@@ -81,6 +82,22 @@ function markWelcomeSeen() {
     window.localStorage.setItem(welcomeStorageKey, "true");
   } catch {
     // The popup can still be dismissed if localStorage is unavailable.
+  }
+}
+
+async function applyBrandSuffix() {
+  try {
+    const response = await fetch("/app-config");
+    if (!response.ok) {
+      return;
+    }
+
+    const config = await response.json();
+    if (typeof config.brand_suffix === "string" && config.brand_suffix.trim() !== "") {
+      brandBeta.textContent = config.brand_suffix;
+    }
+  } catch {
+    // The static fallback is the main-branch label.
   }
 }
 
@@ -666,6 +683,7 @@ function parseExpansionNotes() {
 }
 
 updateManualDirectionButtons();
+applyBrandSuffix();
 applyTheme(getPreferredTheme());
 applyCustomAccent(getStoredCustomAccent() || defaultCustomAccent);
 applyAccent(getPreferredAccent());

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -14,6 +15,7 @@ from one_word_summarizer import summarize_to_one_word
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 RESOURCES_DIR = BASE_DIR.parent / "resources"
+BRANCH_ENV_KEYS = ("TEXTFITAI_BRANCH", "VERCEL_GIT_COMMIT_REF", "CF_PAGES_BRANCH", "GITHUB_REF_NAME")
 
 app = FastAPI(title="TextFitAI", description="AI-powered text fitting for exact word and character targets.")
 
@@ -53,9 +55,40 @@ class FitResponse(BaseModel):
     revision_summary: list[str]
 
 
+def _normalize_branch_name(branch: str) -> str:
+    return branch.removeprefix("refs/heads/").strip()
+
+
+def get_current_branch() -> Optional[str]:
+    for env_key in BRANCH_ENV_KEYS:
+        branch = os.environ.get(env_key)
+        if branch:
+            return _normalize_branch_name(branch)
+
+    git_head = BASE_DIR.parent / ".git" / "HEAD"
+    if not git_head.exists():
+        return None
+
+    head = git_head.read_text(encoding="utf-8").strip()
+    if head.startswith("ref: "):
+        return _normalize_branch_name(head.removeprefix("ref: ").removeprefix("refs/heads/"))
+
+    return None
+
+
+def get_brand_suffix(branch: Optional[str] = None) -> str:
+    return "(dev preview)" if branch == "dev" else "(beta)"
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/app-config")
+def app_config() -> dict[str, str]:
+    branch = get_current_branch()
+    return {"branch": branch or "", "brand_suffix": get_brand_suffix(branch)}
 
 
 @app.post("/fit", response_model=FitResponse)
