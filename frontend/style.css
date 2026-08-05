@@ -826,6 +826,7 @@ h2 {
 }
 
 textarea {
+  --notebook-line-height: 32px;
   flex: 1;
   width: 100%;
   min-height: 460px;
@@ -842,10 +843,12 @@ textarea {
       var(--canvas) 27px,
       var(--canvas) 32px
     );
-  background-size: 100% 32px;
+  background-attachment: local;
+  background-origin: content-box;
+  background-size: 100% var(--notebook-line-height);
   color: var(--charcoal);
   font-size: 17px;
-  line-height: 32px;
+  line-height: var(--notebook-line-height);
 }
 
 textarea::placeholder,
@@ -872,7 +875,9 @@ textarea:disabled {
       var(--canvas) 27px,
       var(--canvas) 32px
   );
-  background-size: 100% 100%, 100% 32px;
+  background-attachment: scroll, local;
+  background-origin: border-box, content-box;
+  background-size: 100% 100%, 100% var(--notebook-line-height);
   color: var(--textarea-disabled-ink);
 }
 
